@@ -1,0 +1,14 @@
+BootStrap: docker
+From: rocker/tidyverse:3.6.1
+
+%runscript
+    nginx -c "$1" -p /tmp
+    rserver --www-port "$2" --auth-none 0 --auth-pam-helper pam-helper
+
+%post
+    # RStudio server configuration
+    # echo "www-address=127.0.0.1" >> /etc/rstudio/rserver.conf
+    echo "www-frame-origin=same" >> /etc/rstudio/rserver.conf
+ 
+    # Nginx installation
+    apt-get update && apt-get install -y nginx
