@@ -8,7 +8,8 @@ fi
 NGINX_PORT="$1"
 BASE_URL="${2:-user-redirect/proxy/$NGINX_PORT}"
 
-RSTUDIO_PORT="21200"  # TODO autodetect a free port
+# trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
+RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
 IMAGE="/home/riom/nobackup/tidyverse_nginx_3.6.1.sif"  # TODO use image in /opt/nesi/containers
 
 module load Singularity
