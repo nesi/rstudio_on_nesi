@@ -2,15 +2,26 @@ BootStrap: docker
 From: rocker/tidyverse:3.6.1
 
 %runscript
+    if [ $# -ne 2 ]; then
+        echo "Usage: $(basename $0) NGINX_PORT BASE_URL"
+        exit 1
+    fi
+
+    NGINX_PORT="$1"
+    BASE_URL="$2"
+
+    # trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
+    RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
+
     # create Nginx log folder
     mkdir /tmp/nginx
 
     # create nginx configuration
-    sed "s/RSTUDIO_PORT/$1/; s/NGINX_PORT/$2/; s|BASE_URL|$3|" \
+    sed "s/RSTUDIO_PORT/$RSTUDIO_PORT/; s/NGINX_PORT/$NGINX_PORT/; s|BASE_URL|$BASE_URL|" \
         /home/rstudio/nginx.conf.template > /tmp/nginx.conf
 
     nginx -c /tmp/nginx.conf -p /tmp
-    rserver --www-port "$1" --auth-none 0 --auth-pam-helper pam-helper
+    rserver --www-port "$RSTUDIO_PORT" --auth-none 0 --auth-pam-helper pam-helper
 
 %post
     # RStudio server configuration
