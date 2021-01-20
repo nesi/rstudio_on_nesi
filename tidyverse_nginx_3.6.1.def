@@ -6,7 +6,8 @@ From: rocker/tidyverse:3.6.1
     mkdir /tmp/nginx
 
     # create nginx configuration
-    sed "s/RSTUDIO_PORT/$1/; s/NGINX_PORT/$2/; s|BASE_URL|$3|" /home/rstudio/nginx.conf.template > /tmp/nginx.conf
+    sed "s/RSTUDIO_PORT/$1/; s/NGINX_PORT/$2/; s|BASE_URL|$3|" \
+        /home/rstudio/nginx.conf.template > /tmp/nginx.conf
 
     nginx -c /tmp/nginx.conf -p /tmp
     rserver --www-port "$1" --auth-none 0 --auth-pam-helper pam-helper
