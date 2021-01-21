@@ -12,7 +12,7 @@
 
 3. Install the current package:
    ```
-   ml JupyterLab  # to make sure it is loaded
+   module load JupyterLab
    pip install GIT_REPO_PATH_TO_ADD
    ```
 
