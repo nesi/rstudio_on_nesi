@@ -18,3 +18,9 @@
 
 4. Start a new instance on jupyter.nesi.org.nz and click on the RStudio icon to
    start it in a separate tab of your web browser.
+
+
+## References
+
+- https://jupyter-server-proxy.readthedocs.io
+- https://github.com/jupyterhub/jupyter-rsession-proxy

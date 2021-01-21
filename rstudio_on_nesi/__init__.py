@@ -1,5 +1,6 @@
 import os
 import subprocess
+import pkg_resources
 from pathlib import Path
 
 
@@ -21,6 +22,8 @@ def setup_rstudio():
     with password_file.open() as fd:
         rstudio_password = fd.read()
 
+    icon_path = pkg_resources.resource_filename("rstudio_on_nesi", "rstudio_logo.svg")
+
     return {
         "command": [
             get_singularity_path(),
@@ -34,8 +37,5 @@ def setup_rstudio():
         ],
         "environment": {"PASSWORD": rstudio_password},
         "absolute_url": False,
-        "launcher_entry": {
-            "icon_path": home_path + "/project/rstudio-server/rstudio.svg",
-            "title": "RStudio",
-        },
+        "launcher_entry": {"icon_path": icon_path, "title": "RStudio"},
     }

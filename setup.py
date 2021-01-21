@@ -1,13 +1,12 @@
-import setuptools
+from setuptools import setup, find_packages
 
-setuptools.setup(
+setup(
     name="jupyter-rstudio-on-nesi",
-    version="0.3",
-    py_modules=["rstudio_on_nesi"],
+    version="0.4",
+    packages=find_packages(),
+    package_data={"rstudio_on_nesi": ["rstudio_logo.svg"]},
     entry_points={
-        "jupyter_serverproxy_servers": [
-            "rstudio = rstudio_on_nesi:setup_rstudio",
-        ]
+        "jupyter_serverproxy_servers": ["rstudio = rstudio_on_nesi:setup_rstudio"]
     },
     install_requires=["jupyter-server-proxy"],
 )
