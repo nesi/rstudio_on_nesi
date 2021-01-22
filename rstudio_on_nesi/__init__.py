@@ -5,6 +5,7 @@ from pathlib import Path
 
 
 def get_singularity_path():
+    """find the path for singularity executable on NeSI"""
     cmd_result = subprocess.run(
         "module load Singularity && which singularity",
         capture_output=True,
@@ -15,12 +16,13 @@ def get_singularity_path():
 
 
 def setup_rstudio():
-    home_path = os.environ["HOME"]
+    home_path = Path(os.environ["HOME"])
     account = os.environ["SLURM_JOB_ACCOUNT"]
 
-    password_file = Path(home_path) / ".rstudio_server_password"
-    with password_file.open() as fd:
-        rstudio_password = fd.read()
+    try:
+        rstudio_password = (home_path / ".rstudio_server_password").read_text()
+    except FileNotFoundError:
+        rstudio_password = None
 
     icon_path = pkg_resources.resource_filename("rstudio_on_nesi", "rstudio_logo.svg")
 
@@ -37,5 +39,9 @@ def setup_rstudio():
         ],
         "environment": {"PASSWORD": rstudio_password},
         "absolute_url": False,
-        "launcher_entry": {"icon_path": icon_path, "title": "RStudio"},
+        "launcher_entry": {
+            "icon_path": icon_path,
+            "title": "RStudio",
+            "enabled": rstudio_password is not None,
+        },
     }
