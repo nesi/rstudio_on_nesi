@@ -12,7 +12,7 @@
 3. Install the current package:
    ```
    module load JupyterLab
-   pip install git+ssh://git@git.hpcf.nesi.org.nz/riom/rstudio_on_nesi.git
+   pip install --user git+ssh://git@git.hpcf.nesi.org.nz/riom/rstudio_on_nesi.git
    ```
 
 4. Start a new instance on jupyter.nesi.org.nz and click on the RStudio icon to start it in a separate tab of your web browser.
