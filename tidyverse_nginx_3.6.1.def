@@ -20,8 +20,8 @@ From: rocker/tidyverse:3.6.1
     sed "s/RSTUDIO_PORT/$RSTUDIO_PORT/; s/NGINX_PORT/$NGINX_PORT/; s|PROXY_URL|$PROXY_URL|" \
         /home/rstudio/nginx.conf.template > /tmp/nginx.conf
 
-    nginx -c /tmp/nginx.conf -p /tmp
-    rserver --www-port "$RSTUDIO_PORT" --auth-none 0 --auth-pam-helper pam-helper
+    rserver --www-port "$RSTUDIO_PORT" --auth-none 0 --auth-pam-helper pam-helper &
+    nginx -c /tmp/nginx.conf -p /tmp -g 'daemon off;'
 
 %post
     # RStudio server configuration

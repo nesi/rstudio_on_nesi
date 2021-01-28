@@ -33,7 +33,7 @@ def setup_rstudio():
             "--contain",
             "-B",
             f'"{home_path}","/nesi/project/{account}","/nesi/nobackup/{account}"',
-            "/opt/nesi/containers/rstudio-server/tidyverse_nginx_3.6.1.sif",
+            "/opt/nesi/containers/rstudio-server/tidyverse_nginx_3.6.1__v0.7.sif",
             "{port}",
             "{base_url}/proxy/{port}",
         ],
