@@ -37,6 +37,7 @@ def setup_rstudio():
             "{port}",
             "{base_url}/proxy/{port}",
         ],
+        "timeout": 15,
         "environment": {"PASSWORD": rstudio_password},
         "absolute_url": False,
         "launcher_entry": {
