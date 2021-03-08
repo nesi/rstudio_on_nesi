@@ -1,5 +1,5 @@
 BootStrap: docker
-From: rocker/rstudio:4.0.4
+From: rocker/tidyverse:4.0.1
 
 %runscript
     if [ $# -ne 2 ]; then
@@ -30,6 +30,9 @@ From: rocker/rstudio:4.0.4
  
     # Nginx installation
     apt-get update && apt-get install -y nginx
+
+    # install Python, used to find a free port when starting the container
+    apt-get install -y python
 
     # create Nginx configuration template file for rstudio reverse proxy
     cat << "EOF" > /home/rstudio/nginx.conf.template
