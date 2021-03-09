@@ -1,4 +1,4 @@
-# Rsudio on NeSI using jupyter-server-proxy
+# RStudio on NeSI using jupyter-server-proxy
 
 This repository contains a Python package that will help you run RStudio Server Open Source on [jupyter.nesi.org.nz](https://jupyter.nesi.org.nz).
 
