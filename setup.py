@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="jupyter-rstudio-on-nesi",
-    version="0.8",
+    version="0.9.1",
     packages=find_packages(),
     package_data={"rstudio_on_nesi": ["rstudio_logo.svg"]},
     entry_points={
