@@ -34,7 +34,7 @@ def setup_rstudio():
             "--writable-tmpfs",
             "-B",
             f'"{home_path}","/nesi/project/{account}","/nesi/nobackup/{account}"',
-            "/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.9.sif",
+            "/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.10.sif",
             "{port}",
             "{base_url}/proxy/{port}",
         ],

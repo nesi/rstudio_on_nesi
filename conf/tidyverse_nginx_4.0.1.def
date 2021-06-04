@@ -26,6 +26,9 @@ From: rocker/tidyverse:4.0.1
 %post
     apt-get update
 
+    # add SSH for some users workflows
+    apt-get install -y openssh-client
+
     # RStudio server configuration
     echo "www-address=127.0.0.1" >> /etc/rstudio/rserver.conf
     echo "www-frame-origin=same" >> /etc/rstudio/rserver.conf
