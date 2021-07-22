@@ -1,5 +1,5 @@
 BootStrap: docker
-From: rocker/rstudio:4.0.4
+From: rocker/tidyverse:4.0.1
 
 %runscript
     if [ $# -ne 2 ]; then
@@ -24,12 +24,23 @@ From: rocker/rstudio:4.0.4
     nginx -c /tmp/nginx.conf -p /tmp -g 'daemon off;'
 
 %post
+    apt-get update
+
+    # add SSH for some users workflows
+    apt-get install -y openssh-client
+
     # RStudio server configuration
     echo "www-address=127.0.0.1" >> /etc/rstudio/rserver.conf
     echo "www-frame-origin=same" >> /etc/rstudio/rserver.conf
  
+    # TeX Live distribution, for Rmarkdown
+    apt-get install -y texlive-full
+
     # Nginx installation
-    apt-get update && apt-get install -y nginx
+    apt-get install -y nginx
+
+    # install Python, used to find a free port when starting the container
+    apt-get install -y python
 
     # create Nginx configuration template file for rstudio reverse proxy
     cat << "EOF" > /home/rstudio/nginx.conf.template
