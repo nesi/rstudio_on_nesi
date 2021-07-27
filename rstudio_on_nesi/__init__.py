@@ -28,13 +28,12 @@ def setup_rstudio():
 
     return {
         "command": [
-            get_singularity_path(),
+            "/nesi/project/nesi99999/Callum/rstudio/rstudio_on_nesi/conf/singularity_wrapper.sh",
             "run",
             "--contain",
             "--writable-tmpfs",
-            "-B",
-            f'"{home_path}","/nesi/project/{account}","/nesi/nobackup/{account}"',
-            "/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.10.sif",
+            "/nesi/project/nesi99999/Callum/rstudio/rstudio_on_nesi/conf/rstudio.sif",
+            #"/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.10.sif",
             "{port}",
             "{base_url}/proxy/{port}",
         ],
