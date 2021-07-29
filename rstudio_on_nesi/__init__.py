@@ -4,21 +4,12 @@ import pkg_resources
 from pathlib import Path
 
 
-def get_singularity_path():
-    """find the path for singularity executable on NeSI"""
-    cmd_result = subprocess.run(
-        "module load Singularity && which singularity",
-        capture_output=True,
-        shell=True,
-        timeout=10,
-    )
-    return cmd_result.stdout.strip().decode()
-
-
 def setup_rstudio():
     home_path = Path(os.environ["HOME"])
     account = os.environ["SLURM_JOB_ACCOUNT"]
-
+    
+    repo_path = "/nesi/project/nesi99999/Callum/rstudio/rstudio_on_nesi"
+    
     try:
         rstudio_password = (home_path / ".rstudio_server_password").read_text()
     except FileNotFoundError:
@@ -28,16 +19,14 @@ def setup_rstudio():
 
     return {
         "command": [
-            "/nesi/project/nesi99999/Callum/rstudio/rstudio_on_nesi/conf/singularity_wrapper.sh",
+            f"{repo_path}/conf/singularity_wrapper.sh",
             "run",
-            "--contain",
             "--writable-tmpfs",
-            "/nesi/project/nesi99999/Callum/rstudio/rstudio_on_nesi/conf/rstudio.sif",
-            #"/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.10.sif",
+            f"{repo_path}/conf/rstudio.sif",
             "{port}",
             "{base_url}/proxy/{port}",
         ],
-        "timeout": 15,
+        "timeout": 60,
         "environment": {"PASSWORD": rstudio_password},
         "absolute_url": False,
         "launcher_entry": {

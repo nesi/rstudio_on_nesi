@@ -2,7 +2,13 @@
 
 initialize(){
     export ROOT="$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)")"
+    debug "root is $ROOT"
     export LOGLEVEL="DEBUG"
+
+    #TMPROOT will be root mount point for all writable files in container.
+    export TMPROOT="$(mktemp -d -t rstudio-jupyter-XXXX)"
+    debug "Using $TMPROOT as TEMPROOT"
+
     module purge
     module unload XALT/full
     module load Singularity
@@ -19,6 +25,10 @@ parse_input(){
 }
 
 set_env(){
+
+    export SINGULARITYENV_VDT_ROOT="$ROOT/conf"
+
+
     # Apps that dont need a special install.
     BIND_PATH_APPS="$BIND_PATH_APPS,\
 /usr/bin/file,\
@@ -27,7 +37,8 @@ set_env(){
 /usr/bin/man,\
 /usr/bin/nano,\
 /usr/bin/unzip,\
-/usr/bin/vim"
+/usr/bin/vim,\
+/usr/bin/which"
 
     BIND_PATH_REQUIRED="$BIND_PATH_REQUIRED,\
 /run,\
@@ -61,54 +72,41 @@ set_env(){
 /nesi/project,\
 /nesi/nobackup,\
 $HOME:/home/$USER,\
-$VDT_ROOT"
+$SINGULARITYENV_VDT_ROOT"
 
 
-    BIND_PATH_R="$BIND_PATH_FS,\
-/opt/nesi,\
-/nesi/project,\
-/nesi/nobackup,\
-$HOME:/home/$USER,\
-$VDT_ROOT"
+    BIND_PATH_R="$BIND_PATH_R,\
+$TMPROOT/var/:/var,\
+$TMPROOT/tmp/:/tmp"
 
-    export SINGULARITY_BINDPATH="$SINGULARITY_BINDPATH,$BIND_PATH_REQUIRED,$BIND_PATH_FS,$BIND_PATH_APPS,$BIND_PATH_CUDA"
+    mkdir -p $TMPROOT/var/lib/rstudio-server 
+    mkdir -p $TMPROOT/var/run/rstudio-server
+    mkdir -p $TMPROOT/tmp/
+
+    #chmod 700 $TMPROOT/var/run $TMPROOT/var/lib 
+
+    export SINGULARITY_BINDPATH="$SINGULARITY_BINDPATH,$BIND_PATH_R,$BIND_PATH_REQUIRED,$BIND_PATH_FS,$BIND_PATH_APPS"
     debug "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
 
-    # If environment setup for desktop flavor.
-    if [[ -f "${VDT_TEMPLATES}/${VDT_BASE}/pre.sh" ]];then
-        source "${VDT_TEMPLATES}/${VDT_BASE}/pre.sh" 
-    fi
 
-    # Set websockify options.
-    VDT_WEBSOCKOPTS=" --log-file=$VDT_LOGFILE --heartbeat=30 $VDT_WEBSOCKOPTS"
 
+    # create Nginx log folder
     # # Additional verboseness for remoteness.
     # if [[ -n $persistent || -n $remote ]];then
     #     VDT_WEBSOCKOPTS=" --verbose ${VDT_WEBSOCKOPTS}"
     # fi    
-
-    # Export all variables starting with 'VDT' to singularity.
-    for ev in $(compgen -A variable | grep ^VDT );do
-        export "SINGULARITYENV_$ev"="${!ev}"
-        debug "SINGULARITYENV_$ev"="${!ev}"
-    done
-    
-    # # Murder any ports that were missed.
-    # while [[ "$(fuser "$VDT_SOCKET_PORT"/tcp 2>/dev/null | wc -w)" -gt 0 ]];do
-    #     warning "Port '$VDT_SOCKET_PORT' in use. Killing $VDT_SOCKET_PORT"
-    #     kill -9 $(fuser "$VDT_SOCKET_PORT"/tcp 2>/dev/null | awk '{ print $1 }')
-    # done
-    
-    # lockfile="${VDT_HOME}/${remote:-$(hostname)}:${VDT_SOCKET_PORT}@${SLURM_JOB_ID}"
-
 }
 
 create_vnc(){   
     # Set instance name
     #if [[ ! -x  "$(readlink -f "$VDT_TEMPLATES/$VDT_BASE/image")" ]];then echo "'$VDT_TEMPLATES/$VDT_BASE/image' doesn't exist!";exit 1;fi
-    cmd="singularity --debug "
-    
-    VDT_OVERLAY=${VDT_OVERLAY:-"$VDT_HOME/overlay.img"}
+    if [[ -n ${verbose} || $LOGLEVEL = "DEBUG" ]];then
+        cmd="singularity --debug "
+    else
+        cmd="singularity"
+    fi
+
+    #VDT_OVERLAY=${VDT_OVERLAY:-"$VDT_HOME/overlay.img"}
 
     # OVERLAY_SIZE=1000
     # OVERLAY="FALSE"
@@ -144,7 +142,9 @@ create_vnc(){
 #     error "Could not find a suitable display port after $max_i attempts."
 # }
 
-# cleanup() {
+cleanup() {
+    :
+}
 #     #vncserver
 #     #singularity $verbose exec "$img_path" "vncserver -kill ":$VDT_DISPLAY_PORT"" 1> ${VDT_LOGFILE} 2>&1 || true
 #     #rm -f $verbose /tmp/.X11-unix/.X*
