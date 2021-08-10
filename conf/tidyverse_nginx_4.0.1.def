@@ -8,7 +8,8 @@ From: rocker/tidyverse:4.0.1
     fi
 
     NGINX_PORT="$1"
-    PROXY_URL="$2"
+    # remove leading slash, if any, from the PROXY_URL
+    PROXY_URL="${2#/}"
 
     # trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
     RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
@@ -72,6 +73,7 @@ http {
 
     location / {
       proxy_pass http://localhost:RSTUDIO_PORT;
+      proxy_redirect http://localhost:RSTUDIO_PORT http://$http_host/PROXY_URL;
       proxy_redirect https://localhost:RSTUDIO_PORT https://$http_host/PROXY_URL;
       proxy_http_version 1.1;
       proxy_set_header Upgrade $http_upgrade;
