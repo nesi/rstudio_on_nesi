@@ -16,9 +16,9 @@ def get_singularity_path():
 
 
 def setup_rstudio():
-    home_path = Path(os.environ["HOME"])
-    project_path = Path("/nesi/project")
-    nobackup_path = Path("/nesi/nobackup")
+    home_path = Path(os.environ["HOME"]).resolve()
+    project_path = Path("/nesi/project").resolve()
+    nobackup_path = Path("/nesi/nobackup").resolve()
 
     try:
         rstudio_password = (home_path / ".rstudio_server_password").read_text()
