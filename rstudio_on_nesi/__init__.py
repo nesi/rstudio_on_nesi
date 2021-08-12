@@ -16,8 +16,9 @@ def get_singularity_path():
 
 
 def setup_rstudio():
-    home_path = Path(os.environ["HOME"])
-    account = os.environ["SLURM_JOB_ACCOUNT"]
+    home_path = Path(os.environ["HOME"]).resolve()
+    project_path = Path("/nesi/project").resolve()
+    nobackup_path = Path("/nesi/nobackup").resolve()
 
     try:
         rstudio_password = (home_path / ".rstudio_server_password").read_text()
@@ -33,10 +34,11 @@ def setup_rstudio():
             "--contain",
             "--writable-tmpfs",
             "-B",
-            f'"{home_path}","/nesi/project/{account}","/nesi/nobackup/{account}"',
-            "/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.10.sif",
+            f'"{home_path}","{home_path}","{project_path}","{project_path}",'
+            f'"{nobackup_path}","{nobackup_path}"',
+            "/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.11.sif",
             "{port}",
-            "{base_url}/proxy/{port}",
+            "{base_url}rstudio",
         ],
         "timeout": 15,
         "environment": {"PASSWORD": rstudio_password},
