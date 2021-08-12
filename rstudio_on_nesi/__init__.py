@@ -1,4 +1,3 @@
-import os
 import subprocess
 import pkg_resources
 from pathlib import Path
@@ -16,7 +15,7 @@ def get_singularity_path():
 
 
 def setup_rstudio():
-    home_path = Path(os.environ["HOME"])
+    home_path = Path.home()
     project_path = Path("/nesi/project")
     nobackup_path = Path("/nesi/nobackup")
 
