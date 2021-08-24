@@ -8,7 +8,7 @@ def setup_rstudio():
     home_path = Path(os.environ["HOME"])
     account = os.environ["SLURM_JOB_ACCOUNT"]
     
-    repo_path = "/nesi/project/nesi99999/Callum/rstudio/rstudio_on_nesi"
+    repo_path = "/nesi/project/nesi99999/Callum/rstudio_on_nesi"
     
     try:
         rstudio_password = (home_path / ".rstudio_server_password").read_text()

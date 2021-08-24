@@ -25,7 +25,7 @@ cat << EOF > /tmp/nginx.conf
 pid /tmp/nginx.pid;
 worker_processes 1;
 error_log /dev/stdout debug;
-daemon off;
+#daemon off;
 
 events {
   worker_connections 1024;
@@ -51,6 +51,7 @@ http {
 
     location / {
       proxy_pass http://localhost:$RSTUDIO_PORT;
+      proxy_redirect http://localhost:$RSTUDIO_PORT http://\$http_host/$PROXY_URL;
       proxy_redirect https://localhost:$RSTUDIO_PORT https://\$http_host/$PROXY_URL;
       proxy_http_version 1.1;
       proxy_set_header Upgrade \$http_upgrade;
@@ -70,7 +71,7 @@ rserver_cmd="rserver \
 
 nginx_cmd="nginx -c /tmp/nginx.conf \
 -p /tmp \
--e /dev/nginx_error.log"
+-e /tmp/nginx_error.log"
 
 echo "${rserver_cmd}"
 echo "${nginx_cmd}"

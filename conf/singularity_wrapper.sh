@@ -1,13 +1,11 @@
 #!/bin/bash -e
 
 initialize(){
-    export ROOT="$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)")"
-    debug "root is $ROOT"
-    export LOGLEVEL="DEBUG"
 
+    #export LOGLEVEL="DEBUG"
+    export ROOT="$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)")"
     #TMPROOT will be root mount point for all writable files in container.
     export TMPROOT="$(mktemp -d -t rstudio-jupyter-XXXX)"
-    debug "Using $TMPROOT as TEMPROOT"
 
     module purge
     module unload XALT/full
@@ -15,6 +13,7 @@ initialize(){
 }
 
 parse_input(){ 
+    debug "$@"
     :
     # if [ $# -ne 5 ]; then
     #     echo "Usage: $(basename $0) <image> <command> NGINX_PORT PROXY_URL"
@@ -100,12 +99,6 @@ $TMPROOT/tmp/:/tmp"
 create_vnc(){   
     # Set instance name
     #if [[ ! -x  "$(readlink -f "$VDT_TEMPLATES/$VDT_BASE/image")" ]];then echo "'$VDT_TEMPLATES/$VDT_BASE/image' doesn't exist!";exit 1;fi
-    if [[ -n ${verbose} || $LOGLEVEL = "DEBUG" ]];then
-        cmd="singularity --debug "
-    else
-        cmd="singularity"
-    fi
-
     #VDT_OVERLAY=${VDT_OVERLAY:-"$VDT_HOME/overlay.img"}
 
     # OVERLAY_SIZE=1000
@@ -120,11 +113,7 @@ create_vnc(){
     #     cmd="$cmd --overlay $VDT_OVERLAY"
     # fi
 
-    # if [[ -n ${VDT_TUNNEL_HOST} ]];then 
-    #     lennut
-    # fi
-    #"${timeout}" s
-    cmd="$cmd $*"
+    cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "exec") $ROOT/conf/rstudio.sif $ROOT/conf/singularity_runscript.sh $*"
     debug "$cmd"
     ${cmd}
     # echo $$ > ${lockfile} 
@@ -185,9 +174,13 @@ cleanup() {
 # }
 
 debug(){
-    if [[ -n ${verbose} || $LOGLEVEL = "DEBUG" ]];then
+    if [[ $LOGLEVEL = "DEBUG" ]];then
         echo "DEBUG: ${FUNCNAME[1]}::${BASH_LINENO[-1]} ${BASH_LINENO[-1]} $*"
     fi
+}
+export () {
+    debug "$@"
+    command export "$@"
 }
 main(){
     initialize
