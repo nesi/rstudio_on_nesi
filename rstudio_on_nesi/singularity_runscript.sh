@@ -5,7 +5,8 @@
 #     exit 1
 # fi
 
-module load R Python
+module load Python
+module load R/$RVER
 
 NGINX_PORT="$1"
 PROXY_URL="$2"
