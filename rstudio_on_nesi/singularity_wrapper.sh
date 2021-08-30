@@ -62,7 +62,9 @@ set_env(){
 /opt/nesi,\
 /nesi/project,\
 /nesi/nobackup,\
-$HOME:/home/$USER"
+$HOME:/home/$USER" 
+
+#Binding home to self, but also /home/user
 
     BIND_PATH_R="$BIND_PATH_R,\
 $TMPROOT/var/:/var,\
@@ -95,7 +97,7 @@ start_rserver(){
     #     cmd="$cmd --overlay $VDT_OVERLAY"
     # fi
 
-    cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "exec") $SIFPATH $ROOT/singularity_runscript.sh $*"
+    cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "run") $SIFPATH $*"
     debug "$cmd"
     ${cmd}
 }
