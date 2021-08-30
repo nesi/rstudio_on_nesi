@@ -14,7 +14,6 @@ Note that the RStudio Server will not outlive the JupyterLab session.
 
 2. Install the current package:
    ```
-   module purge && module load JupyterLab
    pip install --user git+https://github.com/nesi/rstudio_on_nesi@refactor
    ```
 
