@@ -30,7 +30,7 @@ import subprocess
 setup(
    # name=f"jupyter-rstudio{version_without_toolchain}-on-nesi-test",
     name=f"jupyter-rstudio-on-nesi",
-    version="0.10.0",
+    version="0.2.1",
     packages=find_packages(),
     package_data={"rstudio_on_nesi": ["rstudio_logo.svg", "singularity_wrapper.sh"]},
     entry_points={
