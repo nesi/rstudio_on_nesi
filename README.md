@@ -12,20 +12,13 @@ Note that the RStudio Server will not outlive the JupyterLab session.
 
 1. Log in [jupyter.nesi.org.nz](https://jupyter.nesi.org.nz) and open a terminal (or log on NeSI using `ssh`).
 
-2. Configure a password for RStudio server, adding a `.rstudio_server_password` file in your home directory:
-   ```
-   echo "my_secret_password" > ~/.rstudio_server_password
-   chmod 600 ~/.rstudio_server_password
-   ```
-   Make sure to replace `my_secret_password` with your password :-).
-
-3. Install the current package:
+2. Install the current package:
    ```
    module purge && module load JupyterLab
-   pip install --user git+https://github.com/nesi/rstudio_on_nesi
+   pip install --user git+https://github.com/nesi/rstudio_on_nesi@refactor
    ```
 
-4. Start a new instance on [jupyter.nesi.org.nz](https://jupyter.nesi.org.nz) and click on the RStudio icon to start it in a separate tab of your web browser.
+3. Start a new instance on [jupyter.nesi.org.nz](https://jupyter.nesi.org.nz) and click on the RStudio icon to start it in a separate tab of your web browser.
 
 Once installed, you should notice a new icon in the *launcher* interface.
 
