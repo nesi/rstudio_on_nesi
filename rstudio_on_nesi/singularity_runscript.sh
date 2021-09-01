@@ -8,7 +8,7 @@ fi
 module load R/$RVER
 
 NGINX_PORT="$1"
-PROXY_URL="$2"
+PROXY_URL="${2#/}"
 
 # trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
 RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
@@ -68,5 +68,5 @@ nginx_cmd="nginx -c /tmp/nginx.conf \
 
 echo "rserver cmd: ${rserver_cmd}"
 echo "nginx cmd: ${nginx_cmd}"
-$rserver_cmd & 
+$rserver_cmd &
 $nginx_cmd
