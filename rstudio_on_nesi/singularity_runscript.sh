@@ -13,14 +13,7 @@ PROXY_URL="$2"
 # trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
 RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
 
-# mkdir -p /home/rstudio/.rstudio/monitored/user-settings
-# echo 'alwaysSaveHistory="0" \
-# \nloadRData="0" \
-# \nsaveAction="0"' \
-# > /home/rstudio/.rstudio/monitored/user-settings/user-settings
-# chown -R rstudio:rstudio /home/rstudio/.rstudio
-
-# # create Nginx configuration template file for rstudio reverse proxy
+# create Nginx configuration template file for rstudio reverse proxy
 cat << EOF > /tmp/nginx.conf
 pid /tmp/nginx.pid;
 worker_processes 1;
@@ -73,7 +66,7 @@ nginx_cmd="nginx -c /tmp/nginx.conf \
 -p /tmp \
 -e /tmp/nginx_error.log"
 
-echo "${rserver_cmd}"
-echo "${nginx_cmd}"
+echo "rserver cmd: ${rserver_cmd}"
+echo "nginx cmd: ${nginx_cmd}"
 $rserver_cmd & 
 $nginx_cmd

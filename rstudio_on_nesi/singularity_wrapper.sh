@@ -58,6 +58,7 @@ set_env(){
 # /cm/local/apps/cuda,\
 # $EB_ROOT_CUDA"
 #/var/lib/dcv-gl/lib64,\
+
     BIND_PATH_FS="$BIND_PATH_FS,\
 /opt/nesi,\
 /nesi/project,\
@@ -65,7 +66,6 @@ set_env(){
 $HOME"
 
 #Binding home to self, but also /home/user
-
     BIND_PATH_R="$BIND_PATH_R,\
 $TMPROOT/var/:/var,\
 $TMPROOT/tmp/:/tmp"
@@ -74,33 +74,13 @@ $TMPROOT/tmp/:/tmp"
     mkdir -p $TMPROOT/var/run/rstudio-server
     mkdir -p $TMPROOT/tmp/
 
-    #chmod 700 $TMPROOT/var/run $TMPROOT/var/lib 
-
     export SINGULARITY_BINDPATH="$SINGULARITY_BINDPATH,$BIND_PATH_R,$BIND_PATH_REQUIRED,$BIND_PATH_FS,$BIND_PATH_APPS"
     debug "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
 }
 
 start_rserver(){   
-    # Set instance name
-    #if [[ ! -x  "$(readlink -f "$VDT_TEMPLATES/$VDT_BASE/image")" ]];then echo "'$VDT_TEMPLATES/$VDT_BASE/image' doesn't exist!";exit 1;fi
-    #VDT_OVERLAY=${VDT_OVERLAY:-"$VDT_HOME/overlay.img"}
-
-    # OVERLAY_SIZE=1000
-    # OVERLAY="FALSE"
-    
-    # if [[ ${OVERLAY} == "TRUE" ]];then
-    #     if [[ ! -r ${VDT_OVERLAY} ]];then
-    #         # Create overlay
-    #         dd if=/dev/zero of=$VDT_OVERLAY bs=1M count=$OVERLAY_SIZE
-    #         mkfs.ext3 $VDT_OVERLAY
-    #     fi
-    #     cmd="$cmd --overlay $VDT_OVERLAY"
-    # fi
-
     # Using 'exec'
     cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "exec") $SIFPATH $*"
-    # Using 'run'
-    #cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "run") $SIFPATH $*"
     debug "$cmd"
     ${cmd}
 }
