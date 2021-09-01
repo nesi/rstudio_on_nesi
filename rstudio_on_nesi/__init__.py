@@ -15,10 +15,13 @@ def setup_rstudio():
 
     icon_path = pkg_resources.resource_filename("rstudio_on_nesi", "rstudio_logo.svg")
     wrapper_path = pkg_resources.resource_filename("rstudio_on_nesi", "singularity_wrapper.sh")
+    runscript_path = pkg_resources.resource_filename("rstudio_on_nesi", "singularity_runscript.sh")
+
 
     return {
         "command": [
             wrapper_path,
+            runscript_path,
             "{port}",
             "{base_url}/proxy/{port}",
         ],

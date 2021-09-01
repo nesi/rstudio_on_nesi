@@ -1,40 +1,39 @@
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 import subprocess
+import pkg_resources
 
 # class InstallCommand(install):
 #     user_options = install.user_options + [
-#         ('setup=', None, "Additional setup steps")
+#         ('module=', None, "R module to use"),
 #     ]
-
+#     #"R/4.1.0-gimkl-2020a"
 #     def initialize_options(self):
 #         install.initialize_options(self)
-#         self.setup = None
+#         self.module = None
 
 #     def finalize_options(self):
 #         install.finalize_options(self)
 
 #     def run(self):
-#         if self.setup:
-#             try:
-#                 version_list = subprocess.check_output("module -t avail | grep \"^R/\" | tail -n +2", stderr=subprocess.STDOUT, shell=True).decode("utf-8").strip().split("\n")
-#                 for version in version_list:
-#                     if version.find(self.setup):
-#                         version_with_toolchain = version.split("/")[1].strip()
-#                         version_without_toolchain = version_with_toolchain.split("-")[0]
-#                         break
-#             except:
-#                 pass
+#         if subprocess.run(f"module load {self.module}", shell=True).returncode:
+#             raise Exception(f"'{self.module}' is not a valid module." )
+#         with open(pkg_resources.resource_filename("rstudio_on_nesi", ".r_module"), 'w') as f:
+#             print()
+#             f.write(self.module)
+                
 #         install.run(self)
 
 setup(
-   # name=f"jupyter-rstudio{version_without_toolchain}-on-nesi-test",
     name=f"jupyter-rstudio-on-nesi",
     version="0.10.0",
     packages=find_packages(),
-    package_data={"rstudio_on_nesi": ["rstudio_logo.svg", "singularity_wrapper.sh"]},
+    package_data={"rstudio_on_nesi": ["rstudio_logo.svg", "singularity_wrapper.sh", "singularity_runscript.sh"]},
     entry_points={
         "jupyter_serverproxy_servers": ["rstudio = rstudio_on_nesi:setup_rstudio"]
     },
     install_requires=["jupyter-server-proxy"],
+    # cmdclass={
+    #     'install': InstallCommand,
+    # }
 )

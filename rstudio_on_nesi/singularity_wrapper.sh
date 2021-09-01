@@ -62,7 +62,7 @@ set_env(){
 /opt/nesi,\
 /nesi/project,\
 /nesi/nobackup,\
-$HOME" 
+$HOME"
 
 #Binding home to self, but also /home/user
 
@@ -97,7 +97,10 @@ start_rserver(){
     #     cmd="$cmd --overlay $VDT_OVERLAY"
     # fi
 
-    cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "run") $SIFPATH $*"
+    # Using 'exec'
+    cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "exec") $SIFPATH $*"
+    # Using 'run'
+    #cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "run") $SIFPATH $*"
     debug "$cmd"
     ${cmd}
 }
