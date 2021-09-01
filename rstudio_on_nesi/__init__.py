@@ -7,7 +7,7 @@ from pathlib import Path
 def setup_rstudio():
     # home_path = Path(os.environ["HOME"])
     # account = os.environ["SLURM_JOB_ACCOUNT"]
-        
+
     # try:
     #     rstudio_password = (home_path / ".rstudio_server_password").read_text()
     # except FileNotFoundError:
@@ -23,7 +23,7 @@ def setup_rstudio():
             wrapper_path,
             runscript_path,
             "{port}",
-            "{base_url}/proxy/{port}",
+            "{base_url}rstudio",
         ],
         "timeout": 60,
         "absolute_url": False,
