@@ -62,7 +62,7 @@ set_env(){
 /opt/nesi,\
 /nesi/project,\
 /nesi/nobackup,\
-$HOME:/home/$USER" 
+$HOME" 
 
 #Binding home to self, but also /home/user
 
