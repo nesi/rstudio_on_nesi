@@ -26,7 +26,7 @@ import pkg_resources
 
 setup(
     name=f"jupyter-rstudio-on-nesi",
-    version="0.10.0",
+    version="0.2.1",
     packages=find_packages(),
     package_data={"rstudio_on_nesi": ["rstudio_logo.svg", "singularity_wrapper.sh", "singularity_runscript.sh"]},
     entry_points={
