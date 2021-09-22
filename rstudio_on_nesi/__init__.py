@@ -6,7 +6,7 @@ from pathlib import Path
 def get_singularity_path():
     """find the path for singularity executable on NeSI"""
     cmd_result = subprocess.run(
-        "module load Singularity && which singularity",
+        "module load Singularity/3.8.0 && which singularity",
         capture_output=True,
         shell=True,
         timeout=10,
