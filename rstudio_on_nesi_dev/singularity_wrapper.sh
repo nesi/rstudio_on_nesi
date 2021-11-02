@@ -61,6 +61,7 @@ set_env(){
 /nesi/project,\
 /nesi/nobackup,\
 $HOME:/home/$USER,\
+/home/$USER/.rstudio_on_nesi:/var/lib/rstudio-server,\
 $VDT_ROOT"
 
 
@@ -69,15 +70,11 @@ $VDT_ROOT"
 /nesi/project,\
 /nesi/nobackup,\
 $HOME:/home/$USER,\
+/var/lib/rstudio-server:/home/$USER/.rstudio_on_nesi,\
 $VDT_ROOT"
 
     export SINGULARITY_BINDPATH="$SINGULARITY_BINDPATH,$BIND_PATH_REQUIRED,$BIND_PATH_FS,$BIND_PATH_APPS,$BIND_PATH_CUDA"
     debug "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
-
-    # If environment setup for desktop flavor.
-    if [[ -f "${VDT_TEMPLATES}/${VDT_BASE}/pre.sh" ]];then
-        source "${VDT_TEMPLATES}/${VDT_BASE}/pre.sh" 
-    fi
 
     # Set websockify options.
     VDT_WEBSOCKOPTS=" --log-file=$VDT_LOGFILE --heartbeat=30 $VDT_WEBSOCKOPTS"
@@ -126,6 +123,12 @@ create_vnc(){
     #     lennut
     # fi
     #"${timeout}" s
+                "/home/cwal219/project/dev_rstudio_on_nesi_centos/conf/singularity_wrapper.sh",
+            "run",
+            "--contain",
+            "--writable-tmpfs",
+            "/home/cwal219/project/dev_rstudio_on_nesi_centos/conf/nesi_base.sif",
+            #"/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.10.sif"
     cmd="$cmd $*"
     debug "$cmd"
     ${cmd}
