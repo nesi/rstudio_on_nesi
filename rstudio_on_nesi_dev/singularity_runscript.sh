@@ -5,7 +5,7 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-module load R/$RVER
+module load R/$RVER Python
 
 NGINX_PORT="$1"
 PROXY_URL="${2#/}"
