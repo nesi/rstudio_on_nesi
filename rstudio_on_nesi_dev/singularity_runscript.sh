@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# if [ $# -ne 3 ]; then
-#     echo "Usage: $(basename $0) NGINX_PORT PROXY_URL"
-#     exit 1
-# fi
+if [ $# -ne 2 ]; then
+    echo "Usage: $(basename $0) NGINX_PORT PROXY_URL"
+    exit 1
+fi
 
-module load R Python
+module load R/$RVER
 
 NGINX_PORT="$1"
 PROXY_URL="${2#/}"
@@ -13,23 +13,16 @@ PROXY_URL="${2#/}"
 # trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
 RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
 
-# mkdir -p /home/rstudio/.rstudio/monitored/user-settings
-# echo 'alwaysSaveHistory="0" \
-# \nloadRData="0" \
-# \nsaveAction="0"' \
-# > /home/rstudio/.rstudio/monitored/user-settings/user-settings
-# chown -R rstudio:rstudio /home/rstudio/.rstudio
-
-# # create Nginx configuration template file for rstudio reverse proxy
+# create Nginx configuration template file for rstudio reverse proxy
 cat << EOF > /var/lib/rstudio-server/nginx.conf
 pid /tmp/nginx.pid;
 worker_processes 1;
-error_log /dev/stdout debug;
+$([[ $LOGLEVEL = "DEBUG" ]]  && echo "error_log /dev/stdout debug;")
 daemon off;
 
-events {
-  worker_connections 1024;
-}
+  events {
+    worker_connections 1024;
+  }
 
 http {
   root /tmp/;
@@ -73,7 +66,7 @@ nginx_cmd="nginx -c /var/lib/rstudio-server/nginx.conf \
 -p /tmp \
 -e /dev/nginx_error.log"
 
-echo "${rserver_cmd}"
-echo "${nginx_cmd}"
+echo "rserver cmd: ${rserver_cmd}"
+echo "nginx cmd: ${nginx_cmd}"
 $rserver_cmd & 
 $nginx_cmd
