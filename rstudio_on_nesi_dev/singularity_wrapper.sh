@@ -74,8 +74,8 @@ $VDT_ROOT"
 #     BIND_PATH_R="$BIND_PATH_R,\
 # $TMPROOT/var/:/var,\
 # $TMPROOT/tmp/:/tmp"
-    BIND_PATH_R="$BIND_PATH_R,\
-    /var/lib/rstudio-server:/home/$USER/.rstudio_on_nesi"
+#    BIND_PATH_R="$BIND_PATH_R,\
+#    /var/lib/rstudio-server:/home/$USER/.rstudio_on_nesi"
 
     export SINGULARITY_BINDPATH="$SINGULARITY_BINDPATH,$BIND_PATH_R,$BIND_PATH_REQUIRED,$BIND_PATH_FS,$BIND_PATH_APPS"
     debug "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
