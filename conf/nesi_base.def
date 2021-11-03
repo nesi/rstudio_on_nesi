@@ -54,6 +54,7 @@ EOF
 	echo "www-address=127.0.0.1" >> /etc/rstudio/rserver.conf
 	echo "www-frame-origin=same" >> /etc/rstudio/rserver.conf
 
+	mkdir -p /var/lib/rstudio-server
 	chmod -R 777 /var/lib/rstudio-server
 %environment
 
