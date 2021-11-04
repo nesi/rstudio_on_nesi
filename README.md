@@ -8,13 +8,13 @@ cd dev_rstudio_on_nesi_centos
 ```
 module unload XALT
 module load Singularity
-singularity build -r conf/rstudio.sif conf/tidyverse_nginx_4.0.1.def
+singularity build -r conf/nesi_base.sif conf/nesi_base.def
 ```
  
 ### Test without jupyter
 
 ```
-./conf/singularity_wrapper.sh run --writable-tmpfs ./conf/rstudio.sif 9999 localhost
+./rstudio_on_nesi_dev/singularity_wrapper.sh ./rstudio_on_nesi_dev/singularity_runscript.sh 9999 localhost
 ```
 
 ### Install on jupyter
