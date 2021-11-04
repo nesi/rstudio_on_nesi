@@ -93,10 +93,12 @@ debug(){
         echo "DEBUG: ${FUNCNAME[1]}::${BASH_LINENO[-1]} ${BASH_LINENO[-1]} $*"
     fi
 }
+
 export () {
     debug "$@"
     command export "$@"
 }
+
 main(){
     initialize
     parse_input "$@"

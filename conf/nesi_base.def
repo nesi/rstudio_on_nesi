@@ -2,10 +2,13 @@ Bootstrap: yum
 OSVersion: 7
 MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearch/
 Include: yum
+
 %help
     see https://github.com/nesi/nesi-virtual-desktops
+
 %files
 #	/home/yhal003/projects/dev_rstudio_on_nesi_centos/conf/cm-modules-init-client-8.0-53_cm8.0.noarch.rpm /tmp/cm-modules-init-client-8.0-53_cm8.0.noarch.rpm
+
 %post
 
 	yum -y update
@@ -16,7 +19,7 @@ Include: yum
 	yum -y install initscripts
 	yum -y install Lmod
 	yum -y install libicu
-	
+
 	yum -y install git
 	yum -y install wget
 
@@ -42,7 +45,6 @@ set -o nounset
 ## Enforces the custom password specified in the PASSWORD environment variable
 ## The accepted RStudio username is the same as the USER environment variable (i.e., local user name).
 
-
 IFS='' read -r password
 
 [ "${USER}" = "${1}" ] && [ "${PASSWORD}" = "${password}" ]
@@ -56,8 +58,8 @@ EOF
 
 	mkdir -p /var/lib/rstudio-server
 	chmod -R 777 /var/lib/rstudio-server
-%environment
 
+%environment
 
 %runscript 
     . "${VDT_ROOT}/util/singularity_runscript.sh" 
