@@ -34,7 +34,7 @@ Include: yum
 	lua-posix-32-2.el7.x86_64 \
 	lua-5.1.4-15.el7.x86_64 
 
-	#Rstudio server
+	# Rstudio server
 	wget https://download2.rstudio.org/server/centos7/x86_64/rstudio-server-rhel-1.4.1717-x86_64.rpm
 	yum -y install rstudio-server-rhel-1.4.1717-x86_64.rpm
 
@@ -58,6 +58,19 @@ EOF
 
 	mkdir -p /var/lib/rstudio-server
 	chmod -R 777 /var/lib/rstudio-server
+
+	# customise RStudio server login page to allow auto-filling
+	cat << EOF > /etc/rstudio/login.html
+<p>Note: your password is defined in the <code>~/.rstudio_server_password</code> file.</p>
+<script>
+var hashParams = window.location.hash.substr(1).split('&'); // substr(1) to remove the `#`
+for(var i = 0; i < hashParams.length; i++){
+    var p = hashParams[i].split('=');
+    console.log(p)
+    document.getElementById(p[0]).value = decodeURIComponent(p[1]);;
+}
+</script>
+EOF
 
 %environment
 
