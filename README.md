@@ -66,5 +66,6 @@ rstudio_on_nesi_dev/singularity_wrapper.sh $(pwd)/rstudio_on_nesi_dev/singularit
 - install on jupyter
 
 ```
-pip install .
+module purge && module load JupyterLab
+pip install . --use-feature=in-tree-build
 ```
