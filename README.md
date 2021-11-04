@@ -56,13 +56,6 @@ singularity build -r conf/nesi_base.sif conf/nesi_base.def
 rstudio_on_nesi_dev/singularity_wrapper.sh $(pwd)/rstudio_on_nesi_dev/singularity_runscript.sh 9999 localhost
 ```
 
-- test on jupyter without installing
-
-```
-export RSTUDIO_PORT=9999
-rstudio_on_nesi_dev/singularity_wrapper.sh $(pwd)/rstudio_on_nesi_dev/singularity_runscript.sh $RSTUDIO_PORT user/$USER/proxy/$RSTUDIO_PORT/
-```
-
 - install on jupyter
 
 ```
