@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ```
 git clone https://github.com/nesi/dev_rstudio_on_nesi_centos.git
 cd dev_rstudio_on_nesi_centos
@@ -23,7 +22,6 @@ singularity build -r conf/rstudio.sif conf/tidyverse_nginx_4.0.1.def
 ```
 pip install .
 ```
-=======
 # RStudio on NeSI using jupyter-server-proxy
 
 This repository contains a Python package that will help you run RStudio Server Open Source on [jupyter.nesi.org.nz](https://jupyter.nesi.org.nz).
@@ -56,4 +54,3 @@ When starting RStudio Server, the username requested is your **NeSI** login and 
 
 - https://jupyter-server-proxy.readthedocs.io
 - https://github.com/jupyterhub/jupyter-rsession-proxy
->>>>>>> d32605ea840e5da8129574e76d36676b309afa68

@@ -5,7 +5,7 @@ initialize(){
     #export LOGLEVEL="DEBUG"
     export ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)"
     #export SIFPATH="/opt/nesi/containers/rstudio-server/r_nesi_centos7.sif"
-    export SIFPATH="/home/cwal219/project/dev_rstudio_on_nesi_centos/conf/nesi_base.sif"
+    export SIFPATH="/nesi/project/nesi99999/Callum/dev_rstudio_on_nesi_centos/conf/nesi_base.sif"
 
     #TMPROOT will be root mount point for all writable files in container.
     # export TMPROOT="$(mktemp -d -t rstudio-jupyter-XXXX)"
