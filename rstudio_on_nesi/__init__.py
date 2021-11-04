@@ -4,45 +4,31 @@ import pkg_resources
 from pathlib import Path
 
 
-def get_singularity_path():
-    """find the path for singularity executable on NeSI"""
-    cmd_result = subprocess.run(
-        "module load Singularity && which singularity",
-        capture_output=True,
-        shell=True,
-        timeout=10,
-    )
-    return cmd_result.stdout.strip().decode()
-
-
 def setup_rstudio():
-    home_path = Path(os.environ["HOME"])
-    account = os.environ["SLURM_JOB_ACCOUNT"]
+    # home_path = Path(os.environ["HOME"])
+    # account = os.environ["SLURM_JOB_ACCOUNT"]
 
-    try:
-        rstudio_password = (home_path / ".rstudio_server_password").read_text()
-    except FileNotFoundError:
-        rstudio_password = None
+    # try:
+    #     rstudio_password = (home_path / ".rstudio_server_password").read_text()
+    # except FileNotFoundError:
+    #     rstudio_password = None
 
     icon_path = pkg_resources.resource_filename("rstudio_on_nesi", "rstudio_logo.svg")
+    wrapper_path = pkg_resources.resource_filename("rstudio_on_nesi", "singularity_wrapper.sh")
+    runscript_path = pkg_resources.resource_filename("rstudio_on_nesi", "singularity_runscript.sh")
+
 
     return {
         "command": [
-            "/nesi/project/nesi99999/Callum/rstudio/rstudio_on_nesi/conf/singularity_wrapper.sh",
-            "run",
-            "--contain",
-            "--writable-tmpfs",
-            "/nesi/project/nesi99999/Callum/rstudio/rstudio_on_nesi/conf/rstudio.sif",
-            #"/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.10.sif",
+            wrapper_path,
+            runscript_path,
             "{port}",
-            "{base_url}/proxy/{port}",
+            "{base_url}rstudio",
         ],
-        "timeout": 15,
-        "environment": {"PASSWORD": rstudio_password},
+        "timeout": 60,
         "absolute_url": False,
         "launcher_entry": {
             "icon_path": icon_path,
             "title": "RStudio",
-            "enabled": rstudio_password is not None,
         },
     }

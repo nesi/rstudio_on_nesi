@@ -10,4 +10,7 @@ setup(
         "jupyter_serverproxy_servers": ["rstudio_dev = rstudio_on_nesi_dev:setup_rstudio"]
     },
     install_requires=["jupyter-server-proxy"],
+    # cmdclass={
+    #     'install': InstallCommand,
+    # }
 )
