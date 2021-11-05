@@ -1,27 +1,3 @@
-```
-git clone https://github.com/nesi/dev_rstudio_on_nesi_centos.git
-cd dev_rstudio_on_nesi_centos
-```
-
-### Build container
-
-```
-module unload XALT
-module load Singularity
-singularity build -r conf/nesi_base.sif conf/nesi_base.def
-```
- 
-### Test without jupyter
-
-```
-./rstudio_on_nesi_dev/singularity_wrapper.sh ./rstudio_on_nesi_dev/singularity_runscript.sh 9999 localhost
-```
-
-### Install on jupyter
-
-```
-pip install .
-```
 # RStudio on NeSI using jupyter-server-proxy
 
 This repository contains a Python package that will help you run RStudio Server Open Source on [jupyter.nesi.org.nz](https://jupyter.nesi.org.nz).
@@ -54,3 +30,35 @@ When starting RStudio Server, the username requested is your **NeSI** login and 
 
 - https://jupyter-server-proxy.readthedocs.io
 - https://github.com/jupyterhub/jupyter-rsession-proxy
+
+
+## Notes for maintainers
+
+- clone the repository
+
+```
+git clone https://github.com/nesi/rstudio_on_nesi.git
+cd rstudio_on_nesi
+git checkout refactor
+```
+
+- build the container
+
+```
+module unload XALT
+module load Singularity
+singularity build -r conf/nesi_base.sif conf/nesi_base.def
+```
+
+- test without jupyter
+
+```
+rstudio_on_nesi_dev/singularity_wrapper.sh $(pwd)/rstudio_on_nesi_dev/singularity_runscript.sh 9999 localhost
+```
+
+- install on jupyter
+
+```
+module purge && module load JupyterLab
+pip install . --use-feature=in-tree-build
+```

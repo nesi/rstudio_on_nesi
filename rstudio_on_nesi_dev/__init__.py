@@ -33,7 +33,7 @@ def setup_rstudio():
             wrapper_path,
             runscript_path,
             "{port}",
-            "{base_url}/proxy/{port}",
+            "{base_url}rstudio_dev",
         ],
         "timeout": 15,
         "environment": {"PASSWORD": rstudio_password},

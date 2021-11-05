@@ -63,12 +63,16 @@ set_env(){
 # $EB_ROOT_CUDA"
 #/var/lib/dcv-gl/lib64,\
 
+    # folder used as a place where rstudio can write
+    RSTUDIO_VAR_FOLDER="/home/$USER/.rstudio_on_nesi"
+    mkdir -p "$RSTUDIO_VAR_FOLDER"
+
     BIND_PATH_FS="$BIND_PATH_FS,\
 /opt/nesi,\
 /nesi/project,\
 /nesi/nobackup,\
 $HOME:/home/$USER,\
-/home/$USER/.rstudio_on_nesi:/var/lib/rstudio-server,\
+$RSTUDIO_VAR_FOLDER:/var/lib/rstudio-server,\
 $VDT_ROOT"
 #Binding home to self, but also /home/user
 #     BIND_PATH_R="$BIND_PATH_R,\
@@ -93,10 +97,12 @@ debug(){
         echo "DEBUG: ${FUNCNAME[1]}::${BASH_LINENO[-1]} ${BASH_LINENO[-1]} $*"
     fi
 }
+
 export () {
     debug "$@"
     command export "$@"
 }
+
 main(){
     initialize
     parse_input "$@"

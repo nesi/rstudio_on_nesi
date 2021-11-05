@@ -3,7 +3,6 @@ OSVersion: 7
 MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearch/
 Include: yum
 
-
 %post
   yum -y update
   yum -y upgrade
@@ -26,7 +25,7 @@ Include: yum
   lua-posix-32-2.el7.x86_64 \
   lua-5.1.4-15.el7.x86_64
 
-  #Rstudio server
+  # Rstudio server
   wget https://download2.rstudio.org/server/centos7/x86_64/rstudio-server-rhel-1.4.1717-x86_64.rpm
   yum -y install rstudio-server-rhel-1.4.1717-x86_64.rpm
   # yum -y install texlive-full
@@ -37,7 +36,7 @@ Include: yum
   mkdir -p /etc/services.d/rstudio/
   mkdir -p /usr/local/lib/R/etc/
   # mkdir -p /var/lib/rstudio-server/
-  # # RStudio server configuration
+  # RStudio server configuration
   echo "www-address=127.0.0.1" >> /etc/rstudio/rserver.conf
   echo "www-frame-origin=same" >> /etc/rstudio/rserver.conf
 
@@ -52,7 +51,6 @@ Include: yum
   # \n}' >> /usr/local/lib/R/etc/Rprofile.site
   # # TeX Live distribution, for Rmarkdown
   # apt-get install -y texlive-full
-
 
 %environment
 
