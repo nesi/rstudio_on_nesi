@@ -1,5 +1,14 @@
 #!/bin/bash -e
 
+# TODO remove dead code / variables
+# TODO fix version of environment modules loaded
+# TODO remove hardcoded path to container, make it a script input
+# TODO document script inputs (explicit and implicit via environment variables, e.g. $LOGLEVEL)
+# TODO make the script display message if wrong number of inputs or missing environment variables
+# TODO rename .bash as it's a bash script
+# TODO run shellcheck on the file
+# TODO use robust option of bash to limit bugs (set -euo pipefail)
+
 initialize(){
 
     #export LOGLEVEL="DEBUG"

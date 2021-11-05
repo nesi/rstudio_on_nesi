@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# TODO document script inputs (explicit and implicit via environment variables, e.g. $RVER)
+# TODO make the script display message if wrong number of inputs or missing environment variables
+# TODO fix version of environment modules loaded (or add an option for Python module version)
+# TODO rename .bash as it's a bash script
+# TODO run shellcheck on the file
+# TODO use robust option of bash to limit bugs (set -euo pipefail)
+
 if [ $# -ne 2 ]; then
     echo "Usage: $(basename $0) NGINX_PORT PROXY_URL"
     exit 1
