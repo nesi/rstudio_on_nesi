@@ -20,16 +20,18 @@ PROXY_URL="${2#/}"
 # trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
 RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
 
-# create Nginx configuration template file for rstudio reverse proxy
-cat << EOF > /var/lib/rstudio-server/nginx.conf
+# create an Nginx configuration file for rstudio reverse proxy
+NGINX_CONFIG_FILE="/var/lib/rstudio-server/nginx.conf"
+
+cat << EOF > "$NGINX_CONFIG_FILE"
 pid /tmp/nginx.pid;
 worker_processes 1;
 $([[ $LOGLEVEL = "DEBUG" ]]  && echo "error_log /dev/stdout debug;")
 daemon off;
 
-  events {
-    worker_connections 1024;
-  }
+events {
+  worker_connections 1024;
+}
 
 http {
   root /tmp/;
@@ -50,6 +52,7 @@ http {
     listen $NGINX_PORT;
 
     location / {
+      set \$args \$args&username=$USER&password=$PASSWORD;
       proxy_pass http://localhost:$RSTUDIO_PORT;
       proxy_redirect http://localhost:$RSTUDIO_PORT http://\$http_host/$PROXY_URL;
       proxy_redirect https://localhost:$RSTUDIO_PORT https://\$http_host/$PROXY_URL;
@@ -63,13 +66,13 @@ http {
 EOF
 
 rserver_cmd="/usr/lib/rstudio-server/bin/rserver \
---www-port "$RSTUDIO_PORT" \
+--www-port $RSTUDIO_PORT \
 --auth-none 0 \
 --auth-pam-helper-path /usr/bin/pam-helper \
 --server-data-dir /tmp \
 --rsession-which-r=$(which R)"
 
-nginx_cmd="nginx -c /var/lib/rstudio-server/nginx.conf \
+nginx_cmd="nginx -c $NGINX_CONFIG_FILE \
 -p /tmp \
 -e /dev/nginx_error.log"
 
