@@ -52,8 +52,9 @@ http {
     listen $NGINX_PORT;
 
     location / {
-      set \$args \$args&username=$USER&password=\$http_rstudio_password;
       proxy_pass http://localhost:$RSTUDIO_PORT;
+      proxy_redirect ~^http://localhost:$RSTUDIO_PORT/auth-sign-in(.+)\$ https://\$http_host/$PROXY_URL/auth-sign-in?username=$USER&password=\$http_rstudio_password;
+      proxy_redirect ~^https://localhost:$RSTUDIO_PORT/auth-sign-in(.+)\$ https://\$http_host/$PROXY_URL/auth-sign-in?username=$USER&password=\$http_rstudio_password;
       proxy_redirect http://localhost:$RSTUDIO_PORT http://\$http_host/$PROXY_URL;
       proxy_redirect https://localhost:$RSTUDIO_PORT https://\$http_host/$PROXY_URL;
       proxy_http_version 1.1;
