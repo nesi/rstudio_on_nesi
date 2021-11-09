@@ -1,11 +1,20 @@
 #!/bin/bash -e
 
+# TODO remove dead code / variables
+# TODO fix version of environment modules loaded
+# TODO remove hardcoded path to container, make it a script input
+# TODO document script inputs (explicit and implicit via environment variables, e.g. $LOGLEVEL)
+# TODO make the script display message if wrong number of inputs or missing environment variables
+# TODO rename .bash as it's a bash script
+# TODO run shellcheck on the file
+# TODO use robust option of bash to limit bugs (set -euo pipefail)
+
 initialize(){
 
     #export LOGLEVEL="DEBUG"
     export ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)"
     #export SIFPATH="/opt/nesi/containers/rstudio-server/r_nesi_centos7.sif"
-    export SIFPATH="/nesi/project/nesi99999/Callum/dev_rstudio_on_nesi_centos/conf/nesi_base.sif"
+    export SIFPATH="/nesi/project/nesi99999/riom/rstudio-server/conf/nesi_base.sif"
 
     #TMPROOT will be root mount point for all writable files in container.
     # export TMPROOT="$(mktemp -d -t rstudio-jupyter-XXXX)"

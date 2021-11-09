@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# TODO document script inputs (explicit and implicit via environment variables, e.g. $RVER)
+# TODO make the script display message if wrong number of inputs or missing environment variables
+# TODO fix version of environment modules loaded (or add an option for Python module version)
+# TODO rename .bash as it's a bash script
+# TODO run shellcheck on the file
+# TODO use robust option of bash to limit bugs (set -euo pipefail)
+
 if [ $# -ne 2 ]; then
     echo "Usage: $(basename $0) NGINX_PORT PROXY_URL"
     exit 1
@@ -13,16 +20,18 @@ PROXY_URL="${2#/}"
 # trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
 RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
 
-# create Nginx configuration template file for rstudio reverse proxy
-cat << EOF > /var/lib/rstudio-server/nginx.conf
+# create an Nginx configuration file for rstudio reverse proxy
+NGINX_CONFIG_FILE="/var/lib/rstudio-server/nginx.conf"
+
+cat << EOF > "$NGINX_CONFIG_FILE"
 pid /tmp/nginx.pid;
 worker_processes 1;
 $([[ $LOGLEVEL = "DEBUG" ]]  && echo "error_log /dev/stdout debug;")
 daemon off;
 
-  events {
-    worker_connections 1024;
-  }
+events {
+  worker_connections 1024;
+}
 
 http {
   root /tmp/;
@@ -44,6 +53,8 @@ http {
 
     location / {
       proxy_pass http://localhost:$RSTUDIO_PORT;
+      proxy_redirect ~^http://localhost:$RSTUDIO_PORT/auth-sign-in(.+)\$ https://\$http_host/$PROXY_URL/auth-sign-in?username=$USER&password=\$http_rstudio_password;
+      proxy_redirect ~^https://localhost:$RSTUDIO_PORT/auth-sign-in(.+)\$ https://\$http_host/$PROXY_URL/auth-sign-in?username=$USER&password=\$http_rstudio_password;
       proxy_redirect http://localhost:$RSTUDIO_PORT http://\$http_host/$PROXY_URL;
       proxy_redirect https://localhost:$RSTUDIO_PORT https://\$http_host/$PROXY_URL;
       proxy_http_version 1.1;
@@ -56,13 +67,13 @@ http {
 EOF
 
 rserver_cmd="/usr/lib/rstudio-server/bin/rserver \
---www-port "$RSTUDIO_PORT" \
+--www-port $RSTUDIO_PORT \
 --auth-none 0 \
 --auth-pam-helper-path /usr/bin/pam-helper \
 --server-data-dir /tmp \
 --rsession-which-r=$(which R)"
 
-nginx_cmd="nginx -c /var/lib/rstudio-server/nginx.conf \
+nginx_cmd="nginx -c $NGINX_CONFIG_FILE \
 -p /tmp \
 -e /dev/nginx_error.log"
 

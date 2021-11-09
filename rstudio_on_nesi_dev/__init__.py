@@ -1,32 +1,28 @@
 import os
 import subprocess
 import pkg_resources
+import secrets
 from pathlib import Path
-
-
-def get_singularity_path():
-    """find the path for singularity executable on NeSI"""
-    cmd_result = subprocess.run(
-        "module load Singularity && which singularity",
-        capture_output=True,
-        shell=True,
-        timeout=10,
-    )
-    return cmd_result.stdout.strip().decode()
 
 
 def setup_rstudio():
     home_path = Path(os.environ["HOME"])
     account = os.environ["SLURM_JOB_ACCOUNT"]
 
-    try:
-        rstudio_password = (home_path / ".rstudio_server_password").read_text()
-    except FileNotFoundError:
-        rstudio_password = None
+    password_file = home_path / ".rstudio_server_password"
+    if not password_file.is_file():
+        password_file.write_text(secrets.token_hex())
+    rstudio_password = password_file.read_text().rstrip()
 
-    icon_path = pkg_resources.resource_filename("rstudio_on_nesi_dev", "rstudio_logo.svg")
-    wrapper_path = pkg_resources.resource_filename("rstudio_on_nesi_dev", "singularity_wrapper.sh")
-    runscript_path = pkg_resources.resource_filename("rstudio_on_nesi_dev", "singularity_runscript.sh")
+    icon_path = pkg_resources.resource_filename(
+        "rstudio_on_nesi_dev", "rstudio_logo.svg"
+    )
+    wrapper_path = pkg_resources.resource_filename(
+        "rstudio_on_nesi_dev", "singularity_wrapper.sh"
+    )
+    runscript_path = pkg_resources.resource_filename(
+        "rstudio_on_nesi_dev", "singularity_runscript.sh"
+    )
 
     return {
         "command": [
@@ -41,6 +37,7 @@ def setup_rstudio():
         "launcher_entry": {
             "icon_path": icon_path,
             "title": "_dev_RStudio",
-            "enabled": rstudio_password is not None,
+            "enabled": True,
         },
+        "request_headers_override": {"Rstudio-password": rstudio_password},
     }
