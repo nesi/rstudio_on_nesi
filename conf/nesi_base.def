@@ -4,7 +4,7 @@ MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearc
 Include: yum
 
 %help
-    see https://github.com/nesi/rstudio_on_nesi
+	see https://github.com/nesi/rstudio_on_nesi
 
 %post
 
@@ -30,6 +30,12 @@ Include: yum
 	lua-lpeg-0.12-1.el7.x86_64 \
 	lua-posix-32-2.el7.x86_64 \
 	lua-5.1.4-15.el7.x86_64 
+
+	# SSH needed for some users workflows
+	yum -y install openssh-clients
+
+	# install TeX Live distribution, for Rmarkdown
+	yum -y install texlive  # TODO add latex and latexextra?
 
 	# Rstudio server
 	wget https://download2.rstudio.org/server/centos7/x86_64/rstudio-server-rhel-1.4.1717-x86_64.rpm
