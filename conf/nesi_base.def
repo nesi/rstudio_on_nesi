@@ -4,10 +4,7 @@ MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearc
 Include: yum
 
 %help
-    see https://github.com/nesi/nesi-virtual-desktops
-
-%files
-#	/home/yhal003/projects/dev_rstudio_on_nesi_centos/conf/cm-modules-init-client-8.0-53_cm8.0.noarch.rpm /tmp/cm-modules-init-client-8.0-53_cm8.0.noarch.rpm
+    see https://github.com/nesi/rstudio_on_nesi
 
 %post
 
@@ -64,8 +61,3 @@ EOF
 <p>Note: your password is defined in the <code>~/.rstudio_server_password</code> file.</p>
 <script>(new URL(window.location.href)).searchParams.forEach((x, y) => document.getElementById(y).value = x)</script>
 EOF
-
-%environment
-
-%runscript 
-    . "${VDT_ROOT}/util/singularity_runscript.sh" 
