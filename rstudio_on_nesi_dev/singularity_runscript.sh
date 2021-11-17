@@ -12,7 +12,21 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-module load R/$RVER Python
+set -e  # exit on errors
+
+# run user script id one exists
+USER_MODULES="${XDG_CONFIG_HOME:=$HOME/.config}/rstudio_on_nesi/prelude.bash"
+
+if [[ -f "$USER_MODULES" ]]; then
+    echo "Using user modules from $USER_MODULES"
+    . "$USER_MODULES"
+fi
+
+# ensure R interpreter is available
+if ! command -v R &> /dev/null; then
+    echo "No R interpreter found, loading default R module"
+    module load R
+fi
 
 NGINX_PORT="$1"
 PROXY_URL="${2#/}"
