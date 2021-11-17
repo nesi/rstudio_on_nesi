@@ -50,10 +50,10 @@ module load Singularity
 singularity build -r /nesi/nobackup/nesi99999/rstudio_test_containers/rstudio_server_<RSERVER_VERSION>_on_centos7__v<PACKAGE_VERSION>.def conf/rstudio_server_on_centos7.def
 ```
 
-- test without jupyter
+- test without jupyter (create a ssh tunnel to rstudio directly, not nginx)
 
 ```
-rstudio_on_nesi_dev/singularity_wrapper.sh $(pwd)/rstudio_on_nesi_dev/singularity_runscript.sh 9999 localhost
+PASSWORD=your_secret_password rstudio_on_nesi_dev/singularity_wrapper.sh $(pwd)/rstudio_on_nesi_dev/singularity_runscript.sh 9999 localhost
 ```
 
 - install on jupyter
