@@ -47,7 +47,7 @@ git checkout refactor
 ```
 module unload XALT
 module load Singularity
-singularity build -r /nesi/nobackup/nesi99999/rstudio_test_containers/rstudio_server_<RSERVER_VERSION>_on_centos7__v<PACKAGE_VERSION>.def conf/rstudio_server_on_centos7.def
+singularity build -r /nesi/nobackup/nesi99999/rstudio_test_containers/rstudio_server_<RSERVER_VERSION>_on_centos7__v<PACKAGE_VERSION>.sif conf/rstudio_server_on_centos7.def
 ```
 
 - test without jupyter (create a ssh tunnel to rstudio directly, not nginx)
