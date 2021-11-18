@@ -6,11 +6,16 @@ from pathlib import Path
 
 
 def setup_rstudio():
-    home_path = Path(os.environ["HOME"])
     account = os.environ["SLURM_JOB_ACCOUNT"]
 
-    password_file = home_path / ".rstudio_server_password"
+    try:
+        config_folder = Path(os.environ["XDG_CONFIG_HOME"])
+    except KeyError:
+        config_folder = Path(os.environ["HOME"]) / ".config"
+
+    password_file = config_folder / "rstudio_on_nesi" / "server_password"
     if not password_file.is_file():
+        config_folder.mkdir(parents=True, exist_ok=True)
         password_file.write_text(secrets.token_hex())
     rstudio_password = password_file.read_text().rstrip()
 
