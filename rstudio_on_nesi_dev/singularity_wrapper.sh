@@ -1,22 +1,22 @@
 #!/bin/bash -e
 
-# TODO remove dead code / variables
-# TODO fix version of environment modules loaded
-# TODO remove hardcoded path to container, make it a script input
-# TODO document script inputs (explicit and implicit via environment variables, e.g. $LOGLEVEL)
-# TODO make the script display message if wrong number of inputs or missing environment variables
+#######################################   
+# Wrapper script, excecutes arguments in singularity image with some standard NeSI bind paths.
+# Arguments:
+#   Commands to be run within the singularity container.
+# Env Variables Required:
+#   SIFPATH: Path to singularity image file. Should be built image of '.def contained int the 'conf' directory.
+#            Needs to be absolute path, and bound path.
+# Env Variables Optional:
+#   LOGLEVEL: [DEBUG]
+#   SINGULARITY_BINDPATH,BIND_PATH_REQUIRED,BIND_PATH_FS,BIND_PATH_APPS: Image bind paths, listed in order.
+#######################################
+
 # TODO rename .bash as it's a bash script
-# TODO run shellcheck on the file
-# TODO use robust option of bash to limit bugs (set -euo pipefail)
+set -euo
 
 initialize(){
-    #export LOGLEVEL="DEBUG"
     export ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)"
-
-    #export SIFPATH="/nesi/nobackup/nesi99999/rstudio_test_containers/rstudio_server_1.4.1717_on_centos7__v0.21.0.sif"
-
-    #TMPROOT will be root mount point for all writable files in container.
-    # export TMPROOT="$(mktemp -d -t rstudio-jupyter-XXXX)"
 
     module purge
     module unload XALT/full
@@ -25,11 +25,10 @@ initialize(){
 
 parse_input(){ 
     debug "$@"
-    if [ $# -ne 1 ]; then
-        echo "Usage: $(basename $0) sif"
+    if [ -z "$1" ];then
+        echo "SIFPATH must be set."
         exit 1
     fi
-    SIFPATH="$1"
 }
 
 set_env(){
@@ -70,11 +69,6 @@ set_env(){
 /lib/libjpeg.so.62,\
 /lib64/libjpeg.so"
 
-#     BIND_PATH_CUDA="$BIND_PATH_CUDA,\
-# /cm/local/apps/cuda,\
-# $EB_ROOT_CUDA"
-#/var/lib/dcv-gl/lib64,\
-
     # folder used as a place where rstudio can write
     RSTUDIO_VAR_FOLDER="/home/$USER/.rstudio_on_nesi"
     mkdir -p "$RSTUDIO_VAR_FOLDER"
@@ -86,19 +80,12 @@ set_env(){
 $HOME:/home/$USER,\
 $RSTUDIO_VAR_FOLDER:/var/lib/rstudio-server,\
 $VDT_ROOT"
-#Binding home to self, but also /home/user
-#     BIND_PATH_R="$BIND_PATH_R,\
-# $TMPROOT/var/:/var,\
-# $TMPROOT/tmp/:/tmp"
-#    BIND_PATH_R="$BIND_PATH_R,\
-#    /var/lib/rstudio-server:/home/$USER/.rstudio_on_nesi"
 
-    export SINGULARITY_BINDPATH="$SINGULARITY_BINDPATH,$BIND_PATH_R,$BIND_PATH_REQUIRED,$BIND_PATH_FS,$BIND_PATH_APPS"
+    export SINGULARITY_BINDPATH="$SINGULARITY_BINDPATH,$BIND_PATH_REQUIRED,$BIND_PATH_FS,$BIND_PATH_APPS"
     debug "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
 }
 
 start_rserver(){   
-    # Using 'exec'
     cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "exec") --contain --writable-tmpfs $SIFPATH $*"
     debug "$cmd"
     ${cmd}
