@@ -10,22 +10,26 @@
 # TODO use robust option of bash to limit bugs (set -euo pipefail)
 
 initialize(){
-
     #export LOGLEVEL="DEBUG"
     export ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)"
-    export SIFPATH="/nesi/nobackup/nesi99999/rstudio_test_containers/rstudio_server_1.4.1717_on_centos7__v0.21.0.sif"
+
+    #export SIFPATH="/nesi/nobackup/nesi99999/rstudio_test_containers/rstudio_server_1.4.1717_on_centos7__v0.21.0.sif"
 
     #TMPROOT will be root mount point for all writable files in container.
     # export TMPROOT="$(mktemp -d -t rstudio-jupyter-XXXX)"
 
     module purge
     module unload XALT/full
-    module load Singularity
+    module load Singularity/3.8.5
 }
 
 parse_input(){ 
     debug "$@"
-    :
+    if [ $# -ne 1 ]; then
+        echo "Usage: $(basename $0) sif"
+        exit 1
+    fi
+    SIFPATH="$1"
 }
 
 set_env(){
