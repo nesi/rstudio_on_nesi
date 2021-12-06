@@ -15,8 +15,6 @@ def setup_rstudio():
 
     password_file = rstudio_config_folder / "server_password"
     if not password_file.is_file():
-        print("Create file if doesn't exist")
-        print(rstudio_config_folder)
         rstudio_config_folder.mkdir(parents=True, exist_ok=True)
         password_file.write_text(secrets.token_hex())
     rstudio_password = password_file.read_text().rstrip()
