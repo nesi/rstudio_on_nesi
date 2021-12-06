@@ -15,6 +15,8 @@ def setup_rstudio():
 
     password_file = rstudio_config_folder / "server_password"
     if not password_file.is_file():
+        print("Create file if doesn't exist")
+        print(rstudio_config_folder)
         rstudio_config_folder.mkdir(parents=True, exist_ok=True)
         password_file.write_text(secrets.token_hex())
     rstudio_password = password_file.read_text().rstrip()
@@ -39,7 +41,7 @@ def setup_rstudio():
             "{base_url}rstudio_dev",
         ],
         "timeout": 15,
-        "environment": {"PASSWORD": rstudio_password},
+        "environment": {"PASSWORD": rstudio_password, "SIFPATH":get_sif_path()},
         "absolute_url": False,
         "launcher_entry": {
             "icon_path": icon_path,
@@ -48,3 +50,7 @@ def setup_rstudio():
         },
         "request_headers_override": {"Rstudio-password": rstudio_password},
     }
+
+# May want to add aditional logic to make more failproof.
+def get_sif_path():
+    return "/scale_wlg_persistent/filesets/project/nesi99999/Callum/rstudio_on_nesi/conf/rstudio_server_on_centos7.sif"
