@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash
+
+set -euo pipefail
 
 #######################################   
 # Wrapper script, excecutes arguments in singularity image with some standard NeSI bind paths.
@@ -13,7 +15,6 @@
 #######################################
 
 # TODO rename .bash as it's a bash script
-set -euo
 
 initialize(){
     export ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)"
