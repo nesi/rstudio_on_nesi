@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eo pipefail
 
 #######################################   
 # Wrapper script, excecutes arguments in singularity image with some standard NeSI bind paths.
@@ -87,7 +87,7 @@ $VDT_ROOT"
 }
 
 start_rserver(){   
-    cmd="singularity $([[ $LOGLEVEL = "DEBUG" ]] && echo "--debug shell" || echo "exec") --contain --writable-tmpfs $SIFPATH $*"
+    cmd="singularity $(if [[ $LOGLEVEL = "DEBUG" ]];then echo "--debug shell"; else echo "exec"; fi) --contain --writable-tmpfs $SIFPATH $*"
     debug "$cmd"
     ${cmd}
 }
