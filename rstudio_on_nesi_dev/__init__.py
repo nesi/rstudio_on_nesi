@@ -9,24 +9,26 @@ def setup_rstudio():
     account = os.environ["SLURM_JOB_ACCOUNT"]
 
     try:
-        config_folder = Path(os.environ["XDG_CONFIG_HOME"])
+        rstudio_config_folder = Path(os.environ["XDG_CONFIG_HOME"]) / "rstudio_on_nesi"
     except KeyError:
-        config_folder = Path(os.environ["HOME"]) / ".config"
+        rstudio_config_folder = Path(os.environ["HOME"]) / ".config" / "rstudio_on_nesi"
 
-    password_file = config_folder / "rstudio_on_nesi" / "server_password"
+    password_file = rstudio_config_folder / "server_password"
     if not password_file.is_file():
-        config_folder.mkdir(parents=True, exist_ok=True)
+        rstudio_config_folder.mkdir(parents=True, exist_ok=True)
         password_file.write_text(secrets.token_hex())
     rstudio_password = password_file.read_text().rstrip()
 
+    # Get absoulte path of resources.
+    pkg_path = "rstudio_on_nesi_dev"
     icon_path = pkg_resources.resource_filename(
-        "rstudio_on_nesi_dev", "rstudio_logo.svg"
+        pkg_path, "rstudio_logo.svg"
     )
     wrapper_path = pkg_resources.resource_filename(
-        "rstudio_on_nesi_dev", "singularity_wrapper.sh"
+        pkg_path, "singularity_wrapper.sh"
     )
     runscript_path = pkg_resources.resource_filename(
-        "rstudio_on_nesi_dev", "singularity_runscript.sh"
+        pkg_path, "singularity_runscript.sh"
     )
 
     return {
