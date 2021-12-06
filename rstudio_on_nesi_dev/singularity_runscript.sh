@@ -1,18 +1,23 @@
 #!/bin/bash
 
-# TODO document script inputs (explicit and implicit via environment variables, e.g. $RVER)
-# TODO make the script display message if wrong number of inputs or missing environment variables
-# TODO fix version of environment modules loaded (or add an option for Python module version)
+set -euo pipefail
+
+#######################################   
+# Wrapper script, excecutes arguments in singularity image with some standard NeSI bind paths.
+# Arguments:
+#   NGINX_PORT: Port number.
+#   PROXY_URL: localhost
+# Env Variables Optional:
+#   LOGLEVEL: [DEBUG]
+#   XDG_CONFIG_HOME: 
+#######################################
+
 # TODO rename .bash as it's a bash script
-# TODO run shellcheck on the file
-# TODO use robust option of bash to limit bugs (set -euo pipefail)
 
 if [ $# -ne 2 ]; then
     echo "Usage: $(basename $0) NGINX_PORT PROXY_URL"
     exit 1
 fi
-
-set -e  # exit on errors
 
 # run user script id one exists
 USER_MODULES="${XDG_CONFIG_HOME:=$HOME/.config}/rstudio_on_nesi/prelude.bash"
