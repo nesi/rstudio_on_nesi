@@ -26,7 +26,7 @@ initialize(){
 
 parse_input(){ 
     debug "$@"
-    if [ -z "$1" ];then
+    if [ -z "$SIFPATH" ];then
         echo "SIFPATH must be set."
         exit 1
     fi
