@@ -3,13 +3,13 @@
 set -euo pipefail
 
 #######################################   
-# Wrapper script, excecutes arguments in singularity image with some standard NeSI bind paths.
+# Starts Rstudio server and proxies with nginx
 # Arguments:
 #   NGINX_PORT: Port number.
 #   PROXY_URL: localhost
 # Env Variables Optional:
 #   LOGLEVEL: [DEBUG]
-#   XDG_CONFIG_HOME: 
+#   XDG_CONFIG_HOME: Will be used for config files if set.
 #######################################
 
 # TODO rename .bash as it's a bash script
@@ -96,6 +96,7 @@ nginx_cmd="nginx -c $NGINX_CONFIG_FILE \
 -p /tmp \
 -e /dev/nginx_error.log"
 
+# Print, then run commands.
 echo "rserver cmd: ${rserver_cmd}"
 echo "nginx cmd: ${nginx_cmd}"
 $rserver_cmd & 
