@@ -14,8 +14,6 @@ set -eo pipefail
 #   SINGULARITY_BINDPATH,BIND_PATH_REQUIRED,BIND_PATH_FS,BIND_PATH_APPS: Image bind paths, listed in order.
 #######################################
 
-# TODO rename .bash as it's a bash script
-
 initialize(){
     export ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)"
 

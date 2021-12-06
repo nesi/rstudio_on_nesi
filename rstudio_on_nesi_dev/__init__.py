@@ -27,10 +27,10 @@ def setup_rstudio():
         pkg_path, "rstudio_logo.svg"
     )
     wrapper_path = pkg_resources.resource_filename(
-        pkg_path, "singularity_wrapper.sh"
+        pkg_path, "singularity_wrapper.bash"
     )
     runscript_path = pkg_resources.resource_filename(
-        pkg_path, "singularity_runscript.sh"
+        pkg_path, "singularity_runscript.bash"
     )
 
     return {

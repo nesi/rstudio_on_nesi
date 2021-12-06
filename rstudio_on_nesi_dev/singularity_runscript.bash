@@ -12,8 +12,6 @@ set -euo pipefail
 #   XDG_CONFIG_HOME: Will be used for config files if set.
 #######################################
 
-# TODO rename .bash as it's a bash script
-
 if [ $# -ne 2 ]; then
     echo "Usage: $(basename $0) NGINX_PORT PROXY_URL"
     exit 1
