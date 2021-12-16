@@ -65,8 +65,6 @@ set_env(){
 /lib64/libjpeg.so"
 
     # folder used as a place where rstudio can write
-    
-    
     RSTUDIO_VAR_FOLDER="${XDG_DATA_HOME:=$HOME/.local/share}/rstudio_on_nesi"
     mkdir -p "$RSTUDIO_VAR_FOLDER"
 
