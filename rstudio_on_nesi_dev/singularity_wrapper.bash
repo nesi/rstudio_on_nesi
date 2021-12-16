@@ -11,10 +11,15 @@ set -eo pipefail
 #            Needs to be absolute path, and bound path.
 # Env Variables Optional:
 #   LOGLEVEL: [DEBUG]
-#   SINGULARITY_BINDPATH,BIND_PATH_REQUIRED,BIND_PATH_FS,BIND_PATH_APPS: Image bind paths, listed in order.
+#   SINGULARITY_BINDPATH: Image bind paths, listed in order.
 #######################################
 
 initialize(){
+    if [ -z "$SIFPATH" ];then
+        echo "SIFPATH must be set."
+        exit 1
+    fi
+
     export ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)"
 
     module purge
@@ -22,20 +27,12 @@ initialize(){
     module load Singularity/3.8.5
 }
 
-parse_input(){ 
-    debug "$@"
-    if [ -z "$SIFPATH" ];then
-        echo "SIFPATH must be set."
-        exit 1
-    fi
-}
-
 set_env(){
 
     export SINGULARITYENV_LOGLEVEL="$LOGLEVEL"
 
     # Apps that dont need a special install.
-    BIND_PATH_APPS="$BIND_PATH_APPS,\
+    BIND_PATH_APPS="\
 /usr/bin/file,\
 /usr/bin/htop,\
 /usr/bin/less,\
@@ -45,7 +42,7 @@ set_env(){
 /usr/bin/vim,\
 /usr/bin/which"
 
-    BIND_PATH_REQUIRED="$BIND_PATH_REQUIRED,\
+    BIND_PATH_REQUIRED="\
 /run,\
 /dev/tty0,\
 /etc/machine-id,\
@@ -78,7 +75,7 @@ set_env(){
 /nesi/nobackup,\
 $HOME:/home/$USER,\
 $RSTUDIO_VAR_FOLDER:/var/lib/rstudio-server,\
-$VDT_ROOT"
+$ROOT"
 
     export SINGULARITY_BINDPATH="$SINGULARITY_BINDPATH,$BIND_PATH_REQUIRED,$BIND_PATH_FS,$BIND_PATH_APPS"
     debug "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
@@ -86,19 +83,7 @@ $VDT_ROOT"
 
 start_rserver(){   
     cmd="singularity $(if [[ $LOGLEVEL = "DEBUG" ]];then echo "--debug shell"; else echo "exec"; fi) --contain --writable-tmpfs $SIFPATH $*"
-    debug "$cmd"
     ${cmd}
-}
-
-debug(){
-    if [[ $LOGLEVEL = "DEBUG" ]];then
-        echo "DEBUG: ${FUNCNAME[1]}::${BASH_LINENO[-1]} ${BASH_LINENO[-1]} $*"
-    fi
-}
-
-export () {
-    debug "$@"
-    command export "$@"
 }
 
 main(){
@@ -109,7 +94,5 @@ main(){
     
     return 0
 }
-
-trap cleanup INT ERR SIGINT SIGTERM
 
 main "$@"
