@@ -11,7 +11,7 @@ set -eo pipefail
 #            Needs to be absolute path, and bound path.
 # Env Variables Optional:
 #   LOGLEVEL: [DEBUG]
-#   SINGULARITY_BINDPATH: Image bind paths, listed in order.
+#   SINGULARITY_BINDPATH: Singularity bind path.
 #######################################
 
 initialize(){
@@ -28,7 +28,6 @@ initialize(){
 }
 
 set_env(){
-
     export SINGULARITYENV_LOGLEVEL="$LOGLEVEL"
 
     # Apps that dont need a special install.
@@ -66,7 +65,9 @@ set_env(){
 /lib64/libjpeg.so"
 
     # folder used as a place where rstudio can write
-    RSTUDIO_VAR_FOLDER="/home/$USER/.rstudio_on_nesi"
+    
+    
+    RSTUDIO_VAR_FOLDER="${XDG_DATA_HOME:=$HOME/.local/share}/rstudio_on_nesi"
     mkdir -p "$RSTUDIO_VAR_FOLDER"
 
     BIND_PATH_FS="$BIND_PATH_FS,\
