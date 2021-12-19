@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-from setuptools.command.install import install
 
 setup(
     name="jupyter-rstudio-on-nesi-dev",
@@ -8,8 +7,8 @@ setup(
     package_data={
         "rstudio_on_nesi_dev":[
             "rstudio_logo.svg",
-            "singularity_wrapper.sh",
-            "singularity_runscript.sh",
+            "singularity_wrapper.bash",
+            "singularity_runscript.bash",
         ]
     },
     entry_points={
