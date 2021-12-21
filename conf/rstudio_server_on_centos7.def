@@ -66,4 +66,5 @@ EOF
 	cat << EOF > /etc/rstudio/login.html
 <p>Note: your password is defined in the <code>${XDG_DATA_HOME:=$HOME/.local/share}/rstudio_on_nesi/server_password</code> file.</p>
 <script>(new URL(window.location.href)).searchParams.forEach((x, y) => document.getElementById(y).value = x)</script>
+<script>window.onload = submitRealForm()</script>
 EOF
