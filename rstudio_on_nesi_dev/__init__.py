@@ -10,7 +10,7 @@ from pathlib import Path
 
 def setup_rstudio():
     account = os.environ["SLURM_JOB_ACCOUNT"]
-    default_sif_path = "/scale_wlg_persistent/filesets/project/nesi99999/Callum/rstudio_on_nesi/conf/rstudio_server_on_centos7.sif"
+    default_sif_path="/opt/nesi/containers/rstudio-server/rstudio_server_on_centos7.sif"
 
     try:
         rstudio_config_folder = Path(os.environ["XDG_CONFIG_HOME"]) / "rstudio_on_nesi"
