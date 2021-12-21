@@ -5,8 +5,12 @@ import secrets
 from pathlib import Path
 
 
+# TODO Document this. v
+# If .config/rstudio_on_nesi/singularity_image_path exists, the path specified in here will be used over default image.
+
 def setup_rstudio():
     account = os.environ["SLURM_JOB_ACCOUNT"]
+    default_sif_path = "/scale_wlg_persistent/filesets/project/nesi99999/Callum/rstudio_on_nesi/conf/rstudio_server_on_centos7.sif"
 
     try:
         rstudio_config_folder = Path(os.environ["XDG_CONFIG_HOME"]) / "rstudio_on_nesi"
@@ -17,6 +21,7 @@ def setup_rstudio():
     if not password_file.is_file():
         rstudio_config_folder.mkdir(parents=True, exist_ok=True)
         password_file.write_text(secrets.token_hex())
+
     rstudio_password = password_file.read_text().rstrip()
 
     # Get absoulte path of resources.
@@ -30,6 +35,18 @@ def setup_rstudio():
     runscript_path = pkg_resources.resource_filename(
         pkg_path, "singularity_runscript.bash"
     )
+
+    # May want to add aditional logic to make more failproof.
+    def get_sif_path():
+        
+        try:
+            with open(rstudio_config_folder / "singularity_image_path", "r") as f:
+                result =  f.readline()
+        except:
+            result =  default_sif_path
+
+        print(f"Using image at '{result}'")
+        return result
 
     return {
         "command": [
@@ -48,7 +65,3 @@ def setup_rstudio():
         },
         "request_headers_override": {"Rstudio-password": rstudio_password},
     }
-
-# May want to add aditional logic to make more failproof.
-def get_sif_path():
-    return "/scale_wlg_persistent/filesets/project/nesi99999/Callum/rstudio_on_nesi/conf/rstudio_server_on_centos7.sif"
