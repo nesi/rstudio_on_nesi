@@ -9,7 +9,6 @@ from pathlib import Path
 # If .config/rstudio_on_nesi/singularity_image_path exists, the path specified in here will be used over default image.
 
 def setup_rstudio():
-    account = os.environ["SLURM_JOB_ACCOUNT"]
     default_sif_path="/opt/nesi/containers/rstudio-server/rstudio_server_on_centos7.sif"
 
     try:
