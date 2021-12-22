@@ -1,34 +1,37 @@
 #!/bin/bash
 
-# TODO document script inputs (explicit and implicit via environment variables, e.g. $RVER)
-# TODO make the script display message if wrong number of inputs or missing environment variables
-# TODO fix version of environment modules loaded (or add an option for Python module version)
-# TODO rename .bash as it's a bash script
-# TODO run shellcheck on the file
-# TODO use robust option of bash to limit bugs (set -euo pipefail)
+set -euo pipefail
+
+#######################################
+# Starts Rstudio server and proxies with nginx
+# Arguments:
+#   NGINX_PORT: Port number.
+#   PROXY_URL: localhost
+# Env Variables Optional:
+#   LOGLEVEL: [DEBUG]
+#   XDG_CONFIG_HOME: Will be used for config files if set.
+#######################################
 
 if [ $# -ne 2 ]; then
-    echo "Usage: $(basename $0) NGINX_PORT PROXY_URL"
+    echo "Usage: $(basename ${0}) NGINX_PORT PROXY_URL"
     exit 1
 fi
-
-set -e  # exit on errors
 
 # run user script id one exists
 USER_MODULES="${XDG_CONFIG_HOME:=$HOME/.config}/rstudio_on_nesi/prelude.bash"
 
-if [[ -f "$USER_MODULES" ]]; then
-    echo "Using user modules from $USER_MODULES"
-    . "$USER_MODULES"
+if [[ -f "${USER_MODULES}" ]]; then
+    echo "Using user modules from ${USER_MODULES}"
+    . "${USER_MODULES}"
 fi
 
 # ensure R interpreter is available
-if ! command -v R &> /dev/null; then
+if ! command -v R &>/dev/null; then
     echo "No R interpreter found, loading default R module"
     module load R
 fi
 
-NGINX_PORT="$1"
+NGINX_PORT="${1}"
 PROXY_URL="${2#/}"
 
 # trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
@@ -37,10 +40,10 @@ RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); pr
 # create an Nginx configuration file for rstudio reverse proxy
 NGINX_CONFIG_FILE="/var/lib/rstudio-server/nginx.conf"
 
-cat << EOF > "$NGINX_CONFIG_FILE"
+cat <<EOF >"$NGINX_CONFIG_FILE"
 pid /tmp/nginx.pid;
 worker_processes 1;
-$([[ $LOGLEVEL = "DEBUG" ]]  && echo "error_log /dev/stdout debug;")
+$([[ $LOGLEVEL = "DEBUG" ]] && echo "error_log /dev/stdout debug;")
 daemon off;
 
 events {
@@ -81,17 +84,18 @@ http {
 EOF
 
 rserver_cmd="/usr/lib/rstudio-server/bin/rserver \
---www-port $RSTUDIO_PORT \
+--www-port ${RSTUDIO_PORT} \
 --auth-none 0 \
 --auth-pam-helper-path /usr/bin/pam-helper \
 --server-data-dir /tmp \
 --rsession-which-r=$(which R)"
 
-nginx_cmd="nginx -c $NGINX_CONFIG_FILE \
+nginx_cmd="nginx -c ${NGINX_CONFIG_FILE} \
 -p /tmp \
 -e /dev/nginx_error.log"
 
+# Print, then run commands.
 echo "rserver cmd: ${rserver_cmd}"
 echo "nginx cmd: ${nginx_cmd}"
-$rserver_cmd & 
-$nginx_cmd
+${rserver_cmd} &
+${nginx_cmd}
