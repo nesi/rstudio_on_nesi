@@ -14,7 +14,7 @@ Note that the RStudio Server will not outlive the JupyterLab session.
 
 2. Install the current package:
    ```
-   pip install --user git+https://github.com/nesi/rstudio_on_nesi@refactor
+   pip install --user git+https://github.com/nesi/rstudio_on_nesi
    ```
 
 3. Start a new instance on [jupyter.nesi.org.nz](https://jupyter.nesi.org.nz) and click on the RStudio icon to start it in a separate tab of your web browser.

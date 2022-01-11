@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="jupyter-rstudio-on-nesi-dev",
+    name="rstudio_on_nesi",
     version="0.21.0",
     packages=find_packages(),
     package_data={
-        "rstudio_on_nesi_dev":[
+        "rstudio_on_nesi":[
             "rstudio_logo.svg",
             "singularity_wrapper.bash",
             "singularity_runscript.bash",
@@ -13,7 +13,7 @@ setup(
     },
     entry_points={
         "jupyter_serverproxy_servers":[
-            "rstudio_dev=rstudio_on_nesi_dev:setup_rstudio"
+            "rstudio=rstudio_on_nesi:setup_rstudio"
         ]
     },
     install_requires=["jupyter-server-proxy"],
