@@ -1,51 +1,53 @@
+import os
 import subprocess
-import pkg_resources
+import secrets
+from pkg_resources import resource_filename
 from pathlib import Path
 
 
-def get_singularity_path():
-    """find the path for singularity executable on NeSI"""
-    cmd_result = subprocess.run(
-        "module load Singularity/3.8.0 && which singularity",
-        capture_output=True,
-        shell=True,
-        timeout=10,
-    )
-    return cmd_result.stdout.strip().decode()
+# default image if none configured in ~/.config/rstudio_on_nesi/singularity_image_path
+DEFAULT_SIF_PATH = "/opt/nesi/containers/rstudio-server/rstudio_server_on_centos7.sif"
 
 
 def setup_rstudio():
-    home_path = Path.home()
-    project_path = Path("/nesi/project")
-    nobackup_path = Path("/nesi/nobackup")
-
     try:
-        rstudio_password = (home_path / ".rstudio_server_password").read_text()
-    except FileNotFoundError:
-        rstudio_password = None
+        rstudio_config_folder = Path(os.environ["XDG_CONFIG_HOME"]) / "rstudio_on_nesi"
+    except KeyError:
+        rstudio_config_folder = Path(os.environ["HOME"]) / ".config" / "rstudio_on_nesi"
 
-    icon_path = pkg_resources.resource_filename("rstudio_on_nesi", "rstudio_logo.svg")
+    password_file = rstudio_config_folder / "server_password"
+    if not password_file.is_file():
+        rstudio_config_folder.mkdir(parents=True, exist_ok=True)
+        password_file.write_text(secrets.token_hex())
+
+    rstudio_password = password_file.read_text().rstrip()
+
+    pkg_path = "rstudio_on_nesi"
+    icon_path = resource_filename(pkg_path, "rstudio_logo.svg")
+    wrapper_path = resource_filename(pkg_path, "singularity_wrapper.bash")
+    runscript_path = resource_filename(pkg_path, "singularity_runscript.bash")
+
+    sif_path_conf = rstudio_config_folder / "singularity_image_path"
+    try:
+        sif_path = sif_path_conf.read_text().rstrip()
+    except FileNotFoundError:
+        sif_path = DEFAULT_SIF_PATH
+    print(f"Using image at '{sif_path}'")
 
     return {
         "command": [
-            get_singularity_path(),
-            "run",
-            "--contain",
-            "--writable-tmpfs",
-            "-B",
-            f'"{home_path}","{home_path.resolve()}",'
-            f'"{project_path}","{project_path.resolve()}",'
-            f'"{nobackup_path}","{nobackup_path.resolve()}"',
-            "/opt/nesi/containers/rstudio-server/tidyverse_nginx_4.0.1__v0.11.sif",
+            wrapper_path,
+            runscript_path,
             "{port}",
             "{base_url}rstudio",
         ],
         "timeout": 15,
-        "environment": {"PASSWORD": rstudio_password},
+        "environment": {"PASSWORD": rstudio_password, "SIFPATH": sif_path},
         "absolute_url": False,
         "launcher_entry": {
             "icon_path": icon_path,
             "title": "RStudio",
-            "enabled": rstudio_password is not None,
+            "enabled": True,
         },
+        "request_headers_override": {"Rstudio-password": rstudio_password},
     }
