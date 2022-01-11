@@ -11,7 +11,7 @@ set -eo pipefail
 #
 # Env Variables Required:
 #   SIFPATH: absolute path to a singularity image file, built of a .def file
-#            contained in the 'conf' directory. Needs to be a bound path.
+#            contained in the 'conf' directory
 #
 # Env Variables Optional:
 #   LOGLEVEL: [DEBUG]
