@@ -33,7 +33,7 @@ singularity remote login
 ```
 then
 ```
-singularity build -r rstudio_server_on_centos7.sif rstudio_server_on_centos7.def
+singularity build -r rstudio_server_on_centos7.sif conf/rstudio_server_on_centos7.def
 ```
 
 If this is an update to the default image you will need to `sudo` to admin then 
@@ -51,10 +51,22 @@ echo $PWD/rstudio_server_on_centos7.sif > ${XDG_CONFIG_HOME:=$HOME/.config}/rstu
 
 ## Test without Jupyter
 
-Create a ssh tunnel to rstudio directly, not nginx:
+Start the container from the command line:
 ```
-PASSWORD=your_secret_password rstudio_on_nesi_dev/singularity_wrapper.sh $(pwd)/rstudio_on_nesi_dev/singularity_runscript.sh 9999 localhost
+export SIFPATH=<PATH_TO_SIF_IMAGE>
+PASSWORD=your_secret_password rstudio_on_nesi_dev/singularity_wrapper.bash $(pwd)/rstudio_on_nesi_dev/singularity_runscript.bash 9999 localhost
 ```
+where `<PATH_TO_SIF_IMAGE>` is the path to the container image.
+
+Note we will connect directly to the rstudio server, bypassing the Nginx reverse-proxy which is useless in this context without Jupyter.
+
+Check the messages in the terminal to find out the rstudio server port, for example:
+```
+rserver cmd: /usr/lib/rstudio-server/bin/rserver --www-port 40074 --auth-none 0 [...]
+```
+would correspond to port `40074`.
+
+Finally, start an ssh tunnel on this port and open your web browser at `http://localhost:<REDIRECTED_PORT>` to access rstudio.
 
 
 ## Install from the cloned repository
