@@ -9,11 +9,12 @@ Notes for the maintainers.
 - rebuild container, name it with same version number (see below),
 - change default image name in `rstudio_on_nesi/__init__.py`,
 - test the installation from the local repository (see below),
-- commit, tag the commit and push
+- commit, push, tag and push the tag
   ```
   git commit -av -m "version <VERSION>"
+  git push
   git tag v<VERSION>
-  git push --all
+  git push --tags
   ```
   where `<VERSION>` is the new version number
 
