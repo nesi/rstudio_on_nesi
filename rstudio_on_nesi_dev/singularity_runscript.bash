@@ -17,7 +17,7 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-# run user script id one exists
+# run user script if one exists
 USER_MODULES="${XDG_CONFIG_HOME:=$HOME/.config}/rstudio_on_nesi/prelude.bash"
 
 if [[ -f "${USER_MODULES}" ]]; then
