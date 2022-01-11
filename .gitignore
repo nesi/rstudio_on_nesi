@@ -2,3 +2,5 @@
 *.rpm
 *.sif
 __pycache__
+*.egg-info
+build
