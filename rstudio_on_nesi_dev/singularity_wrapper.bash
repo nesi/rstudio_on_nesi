@@ -3,15 +3,19 @@
 set -eo pipefail
 
 #######################################
-# Wrapper script, excecutes arguments in singularity image with some standard NeSI bind paths.
+# Wrapper script, excecutes arguments in singularity image with some standard
+# NeSI bind paths.
+#
 # Arguments:
-#   Commands to be run within the singularity container.
+#   Commands to be run within the singularity container
+#
 # Env Variables Required:
-#   SIFPATH: Path to singularity image file. Should be built image of '.def contained int the 'conf' directory.
-#            Needs to be absolute path, and bound path.
+#   SIFPATH: absolute path to a singularity image file, built of a .def file
+#            contained in the 'conf' directory. Needs to be a bound path.
+#
 # Env Variables Optional:
 #   LOGLEVEL: [DEBUG]
-#   SINGULARITY_BINDPATH: Singularity bind path.
+#   SINGULARITY_BINDPATH: Singularity bind path
 #######################################
 
 initialize(){

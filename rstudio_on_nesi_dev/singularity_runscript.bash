@@ -4,12 +4,14 @@ set -euo pipefail
 
 #######################################
 # Starts Rstudio server and proxies with nginx
+#
 # Arguments:
-#   NGINX_PORT: Port number.
+#   NGINX_PORT: port number
 #   PROXY_URL: localhost
+#
 # Env Variables Optional:
 #   LOGLEVEL: [DEBUG]
-#   XDG_CONFIG_HOME: Will be used for config files if set.
+#   XDG_CONFIG_HOME: will be used for config files if set.
 #######################################
 
 if [ $# -ne 2 ]; then

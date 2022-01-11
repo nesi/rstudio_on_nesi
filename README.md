@@ -42,33 +42,6 @@ Is used for temp files sockets etc.
 - https://github.com/jupyterhub/jupyter-rsession-proxy
 
 
-## Notes for maintainers
+## Maintenance
 
-- clone the repository
-
-```
-git clone https://github.com/nesi/rstudio_on_nesi.git
-cd rstudio_on_nesi
-git checkout refactor
-```
-
-- build the container
-
-```
-module unload XALT
-module load Singularity
-singularity build -r /nesi/nobackup/nesi99999/rstudio_test_containers/rstudio_server_<RSERVER_VERSION>_on_centos7__v<PACKAGE_VERSION>.sif conf/rstudio_server_on_centos7.def
-```
-
-- test without jupyter (create a ssh tunnel to rstudio directly, not nginx)
-
-```
-PASSWORD=your_secret_password rstudio_on_nesi_dev/singularity_wrapper.sh $(pwd)/rstudio_on_nesi_dev/singularity_runscript.sh 9999 localhost
-```
-
-- install on jupyter
-
-```
-module purge && module load JupyterLab
-pip install . --use-feature=in-tree-build
-```
+Maintenance notes are available in a [dedicated page](MAINTENANCE.md).
