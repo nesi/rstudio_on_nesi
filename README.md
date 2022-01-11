@@ -23,7 +23,7 @@ Once installed, you should notice a new icon in the *launcher* interface.
 
 ![](launcher.png)
 
-When starting RStudio Server, the username requested is your **NeSI** login and the password is the one you defined in the `~/.config/rstudio_on_nesi/server_password` file.
+When starting RStudio Server, if you don't get automatically logged in, the username requested is your **NeSI** login and the password is the one defined in the `~/.config/rstudio_on_nesi/server_password` file.
 
 
 ## Configuration

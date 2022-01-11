@@ -8,14 +8,13 @@ Notes for the maintainers.
 - increase version number in `setup.py`,
 - rebuild container, name it with same version number (see below),
 - change default image name in `rstudio_on_nesi/__init__.py`,
+- test the installation from the local repository (see below),
 - commit, tag the commit and push
-
   ```
   git commit -av -m "version <VERSION>"
   git tag v<VERSION>
   git push --all
   ```
-
   where `<VERSION>` is the new version number
 
 
@@ -48,6 +47,13 @@ If you are not updating the default image, you can specify this image be used by
 echo $PWD/rstudio_server_on_centos7.sif > ${XDG_CONFIG_HOME:=$HOME/.config}/rstudio_on_nesi/singularity_image_path
 ```
 
+## Install from local repository
+
+```
+module purge && module load JupyterLab
+pip install . --use-feature=in-tree-build
+```
+
 
 ## Test without Jupyter
 
@@ -67,11 +73,3 @@ rserver cmd: /usr/lib/rstudio-server/bin/rserver --www-port 40074 --auth-none 0 
 would correspond to port `40074`.
 
 Finally, start an ssh tunnel on this port and open your web browser at `http://localhost:<REDIRECTED_PORT>` to access rstudio.
-
-
-## Install from the cloned repository
-
-```
-module purge && module load JupyterLab
-pip install . --use-feature=in-tree-build
-```
