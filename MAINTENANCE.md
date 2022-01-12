@@ -39,7 +39,6 @@ singularity build -r rstudio_server_on_centos7.sif conf/rstudio_server_on_centos
 If this is an update to the default image you will need to `sudo` to admin then 
 ```
 cp rstudio_server_on_centos7.sif /opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__v<VERSION>.sif
-chmod 766 /opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__v<VERSION>.sif
 ```
 where `<VERSION>` should match the Python package version number.
 
