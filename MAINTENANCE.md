@@ -60,7 +60,7 @@ pip install . --use-feature=in-tree-build
 Start the container from the command line:
 ```
 export SIFPATH=<PATH_TO_SIF_IMAGE>
-PASSWORD=your_secret_password rstudio_on_nesi/singularity_wrapper.bash $(pwd)/rstudio_on_nesi_dev/singularity_runscript.bash 9999 localhost
+PASSWORD=your_secret_password rstudio_on_nesi/singularity_wrapper.bash $(pwd)/rstudio_on_nesi/singularity_runscript.bash 9999 localhost
 ```
 where `<PATH_TO_SIF_IMAGE>` is the path to the container image.
 
