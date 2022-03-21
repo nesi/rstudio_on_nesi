@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 # default image if none configured in ~/.config/rstudio_on_nesi/singularity_image_path
-DEFAULT_SIF_PATH = "/opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__v0.22.1.sif"
+DEFAULT_SIF_PATH = "/opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__v0.22.2.sif"
 
 
 def setup_rstudio():
