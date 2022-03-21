@@ -28,7 +28,7 @@ initialize(){
 
     module purge
     module unload XALT/full
-    module load Singularity/3.8.5
+    module load Singularity/3.9.4
 }
 
 set_env(){
