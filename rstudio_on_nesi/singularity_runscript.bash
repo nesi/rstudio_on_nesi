@@ -85,12 +85,23 @@ http {
 }
 EOF
 
+# find R_LIBS_USER from R itself and append R_LIBS if exists
+R_LIBS_USER=$(Rscript -e "cat(Sys.getenv('R_LIBS_USER'))")
+
+if [ -n "$R_LIBS" ]; then
+    R_LIBS_USER="$R_LIBS_USER:$R_LIBS"
+fi
+
+RSESSION_CONFIG_FILE="/var/lib/rstudio-server/rsession.conf"
+echo "r-libs-user=$R_LIBS_USER" > "$RSESSION_CONFIG_FILE"
+
 rserver_cmd="/usr/lib/rstudio-server/bin/rserver \
 --www-port ${RSTUDIO_PORT} \
 --auth-none 0 \
 --auth-pam-helper-path /usr/bin/pam-helper \
 --server-data-dir /tmp \
---rsession-which-r=$(which R)"
+--rsession-which-r=$(which R) \
+--rsession-config-file=$RSESSION_CONFIG_FILE"
 
 nginx_cmd="nginx -c ${NGINX_CONFIG_FILE} \
 -p /tmp \
