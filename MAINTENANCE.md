@@ -24,7 +24,7 @@ Notes for the maintainers.
 Start from a clean working environment:
 ```
 module purge && module unload XALT
-module load Singularity/3.8.5
+module load Singularity/3.9.4
 ```
 
 You may need to log in for singularity remote build with
