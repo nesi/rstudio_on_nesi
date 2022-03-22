@@ -88,7 +88,7 @@ EOF
 # find R_LIBS_USER from R itself and append R_LIBS if exists
 R_LIBS_USER=$(Rscript -e "cat(Sys.getenv('R_LIBS_USER'))")
 
-if [ -n "$R_LIBS" ]; then
+if [[ -n ${R_LIBS:+1} ]]; then
     R_LIBS_USER="$R_LIBS_USER:$R_LIBS"
 fi
 
