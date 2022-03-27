@@ -24,7 +24,7 @@ Notes for the maintainers.
 Start from a clean working environment:
 ```
 module purge && module unload XALT
-module load Singularity/3.8.5
+module load Singularity/3.9.4
 ```
 
 You may need to log in for singularity remote build with
@@ -60,7 +60,7 @@ pip install . --use-feature=in-tree-build
 Start the container from the command line:
 ```
 export SIFPATH=<PATH_TO_SIF_IMAGE>
-PASSWORD=your_secret_password rstudio_on_nesi/singularity_wrapper.bash $(pwd)/rstudio_on_nesi_dev/singularity_runscript.bash 9999 localhost
+PASSWORD=your_secret_password rstudio_on_nesi/singularity_wrapper.bash $(pwd)/rstudio_on_nesi/singularity_runscript.bash 9999 localhost
 ```
 where `<PATH_TO_SIF_IMAGE>` is the path to the container image.
 
