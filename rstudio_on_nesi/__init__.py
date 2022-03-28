@@ -5,10 +5,10 @@ from pkg_resources import resource_filename
 from pathlib import Path
 
 
+__version__ = "0.22.4"
+
 # default image if none configured in ~/.config/rstudio_on_nesi/singularity_image_path
-DEFAULT_SIF_PATH = (
-    "/opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__v0.22.3.sif"
-)
+DEFAULT_SIF_PATH = f"/opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__v{__version__}.sif"
 
 
 def setup_rstudio():

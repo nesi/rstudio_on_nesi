@@ -68,6 +68,15 @@ set_env(){
     /lib/libjpeg.so.62,\
     /lib64/libjpeg.so"
 
+    # libraries needed for cairo, used to render plots in R
+    BIND_PATH_CAIRO="\
+    /lib64/libpangocairo-1.0.so.0,\
+    /lib64/libpango-1.0.so.0,\
+    /lib64/libpangoft2-1.0.so.0,\
+    /lib64/libthai.so.0,\
+    /lib64/libharfbuzz.so.0,\
+    /lib64/libgraphite2.so.3"
+
     # folder used as a place where rstudio can write
     RSTUDIO_VAR_FOLDER="${XDG_DATA_HOME:=$HOME/.local/share}/rstudio_on_nesi"
     mkdir -p "${RSTUDIO_VAR_FOLDER}"
@@ -80,7 +89,7 @@ set_env(){
     ${RSTUDIO_VAR_FOLDER}:/var/lib/rstudio-server,\
     ${ROOT}"
 
-    export SINGULARITY_BINDPATH="${SINGULARITY_BINDPATH},${BIND_PATH_REQUIRED},${BIND_PATH_FS},${BIND_PATH_APPS}"
+    export SINGULARITY_BINDPATH="${SINGULARITY_BINDPATH},${BIND_PATH_REQUIRED},${BIND_PATH_FS},${BIND_PATH_APPS},${BIND_PATH_CAIRO}"
     if [[ ${LOGLEVEL} = "DEBUG" ]]; then
         echo "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
     fi

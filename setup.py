@@ -1,8 +1,10 @@
 from setuptools import setup, find_packages
 
+import rstudio_on_nesi
+
 setup(
     name="rstudio_on_nesi",
-    version="0.22.3",
+    version=rstudio_on_nesi.__version__,
     packages=find_packages(),
     package_data={
         "rstudio_on_nesi":[

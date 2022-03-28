@@ -5,9 +5,8 @@ Notes for the maintainers.
 
 ## Release a new version
 
-- increase version number in `setup.py`,
-- rebuild container, name it with same version number (see below),
-- change default image name in `rstudio_on_nesi/__init__.py`,
+- increase version number in `rstudio_on_nesi/__init__.py`,
+- rebuild container or create a symlink, name it with same version number (see below),
 - test the installation from the local repository (see below),
 - commit, push, tag and push the tag
   ```
