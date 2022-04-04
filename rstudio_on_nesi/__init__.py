@@ -43,7 +43,7 @@ def setup_rstudio():
             "{port}",
             "{base_url}rstudio",
         ],
-        "timeout": 15,
+        "timeout": 120,
         "environment": {"PASSWORD": rstudio_password, "SIFPATH": sif_path},
         "absolute_url": False,
         "launcher_entry": {
