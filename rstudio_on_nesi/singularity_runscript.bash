@@ -9,35 +9,37 @@ set -euo pipefail
 #   NGINX_PORT: port number
 #   PROXY_URL: localhost
 #
-# Env Variables Optional:
-#   LOGLEVEL: [DEBUG]
-#   XDG_CONFIG_HOME: will be used for config files if set.
+# Optional Env Variables: (default value)
+#   RSTUDIO_PORT:         (random open port)  Will fail if manually selected port unavailable.
+#   LOGLEVEL:             unset               Set to "DEBUG" for extra output.
+#   XDG_CONFIG_HOME:      ("$HOME/.config")   Used for config files if set.
 #######################################
 
 if [ $# -ne 2 ]; then
-    echo "Usage: $(basename ${0}) NGINX_PORT PROXY_URL"
-    exit 1
+  echo "Usage: $(basename ${0}) NGINX_PORT PROXY_URL"
+  exit 1
 fi
 
 # run user script if one exists
 USER_MODULES="${XDG_CONFIG_HOME:=$HOME/.config}/rstudio_on_nesi/prelude.bash"
 
 if [[ -f "${USER_MODULES}" ]]; then
-    echo "Using user modules from ${USER_MODULES}"
-    . "${USER_MODULES}"
+  echo "Using user modules from ${USER_MODULES}"
+  . "${USER_MODULES}"
 fi
 
 # ensure R interpreter is available
 if ! command -v R &>/dev/null; then
-    echo "No R interpreter found, loading default R module"
-    module load R
+  echo "No R interpreter found, loading default R module"
+  module load R
 fi
 
 NGINX_PORT="${1}"
 PROXY_URL="${2#/}"
 
 # trick to find a free port (see https://unix.stackexchange.com/a/132524 and jupyter-server-proxy source code)
-RSTUDIO_PORT="$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
+# If RSTUDIO_PORT is already set, check if it is valid. THROW ERROR IF NOT, errors are relatively descriptive.
+RSTUDIO_PORT="$(python -c "import socket; s=socket.socket(); s.bind(('', ${RSTUDIO_PORT:-0})); print(s.getsockname()[1]); s.close()")"
 
 # create an Nginx configuration file for rstudio reverse proxy
 NGINX_CONFIG_FILE="/var/lib/rstudio-server/nginx.conf"
@@ -89,7 +91,7 @@ EOF
 R_LIBS_USER=$(Rscript -e "cat(unique(c(Sys.getenv('R_LIBS_USER'), .libPaths())), sep=':')")
 
 RSESSION_CONFIG_FILE="/var/lib/rstudio-server/rsession.conf"
-echo "r-libs-user=$R_LIBS_USER" > "$RSESSION_CONFIG_FILE"
+echo "r-libs-user=$R_LIBS_USER" >"$RSESSION_CONFIG_FILE"
 
 rserver_cmd="/usr/lib/rstudio-server/bin/rserver \
 --www-port ${RSTUDIO_PORT} \
