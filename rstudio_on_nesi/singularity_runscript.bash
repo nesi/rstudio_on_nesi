@@ -87,12 +87,8 @@ http {
 }
 EOF
 
-# find R_LIBS_USER from R itself and append R_LIBS if exists
-R_LIBS_USER=$(Rscript -e "cat(Sys.getenv('R_LIBS_USER'))")
-
-if [[ -n ${R_LIBS:+1} ]]; then
-  R_LIBS_USER="$R_LIBS_USER:$R_LIBS"
-fi
+# use R to find the path to libraries, including R_LIBS_USER
+R_LIBS_USER=$(Rscript -e "cat(unique(c(Sys.getenv('R_LIBS_USER'), .libPaths())), sep=':')")
 
 RSESSION_CONFIG_FILE="/var/lib/rstudio-server/rsession.conf"
 echo "r-libs-user=$R_LIBS_USER" >"$RSESSION_CONFIG_FILE"
