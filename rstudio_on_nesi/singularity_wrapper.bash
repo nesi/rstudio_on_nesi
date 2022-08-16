@@ -18,7 +18,7 @@ set -eo pipefail
 #   SINGULARITY_BINDPATH: Singularity bind path
 #######################################
 
-initialize(){
+initialize() {
     if [ -z "${SIFPATH}" ]; then
         echo "SIFPATH must be set."
         exit 1
@@ -31,7 +31,7 @@ initialize(){
     module load Singularity/3.9.4
 }
 
-set_env(){
+set_env() {
     export SINGULARITYENV_LOGLEVEL="${LOGLEVEL}"
 
     # Apps that don't need a special install.
@@ -93,11 +93,15 @@ set_env(){
     if [[ ${LOGLEVEL} = "DEBUG" ]]; then
         echo "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
     fi
+
+    export SINGULARITYENV_MODULEPATH="${MODULEPATH}"
+
 }
 
-main(){
+main() {
     initialize
     set_env
+    LOGLEVEL="DEBUG"
     singularity $(if [[ "${LOGLEVEL}" = "DEBUG" ]]; then echo "--debug shell"; else echo "exec"; fi) --contain --writable-tmpfs "${SIFPATH}" ${*}
     return 0
 }

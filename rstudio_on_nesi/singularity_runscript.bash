@@ -90,8 +90,12 @@ EOF
 # use R to find the path to libraries, including R_LIBS_USER
 R_LIBS_USER=$(Rscript -e "cat(unique(c(Sys.getenv('R_LIBS_USER'), .libPaths())), sep=':')")
 
+RSESSION_PREFLIGHT_SCRIPT="/var/lib/rstudio-server/preflight.bash"
+echo "export MODULEPATH=$MODULEPATH" >$RSESSION_PREFLIGHT_SCRIPT
+
 RSESSION_CONFIG_FILE="/var/lib/rstudio-server/rsession.conf"
 echo "r-libs-user=$R_LIBS_USER" >"$RSESSION_CONFIG_FILE"
+echo "session-preflight-script=$RSESSION_PREFLIGHT_SCRIPT" >>"$RSESSION_CONFIG_FILE"
 
 rserver_cmd="/usr/lib/rstudio-server/bin/rserver \
 --www-port ${RSTUDIO_PORT} \
