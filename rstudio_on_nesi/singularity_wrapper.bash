@@ -101,7 +101,6 @@ set_env() {
 main() {
     initialize
     set_env
-    LOGLEVEL="DEBUG"
     singularity $(if [[ "${LOGLEVEL}" = "DEBUG" ]]; then echo "--debug shell"; else echo "exec"; fi) --contain --writable-tmpfs "${SIFPATH}" ${*}
     return 0
 }
