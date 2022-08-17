@@ -55,11 +55,8 @@ set_env() {
     /usr/bin/lsb_release,\
     /usr/share/fonts,\
     /usr/share/X11/fonts,\
-    /usr/share/lmod/lmod,\
     /usr/include,\
-    /etc/opt/slurm,\
     /etc/X11/,\
-    /opt/slurm,\
     /usr/lib64/libGL.so.1.2.0,\
     /usr/lib64/libmunge.so,\
     /usr/lib64/libmunge.so.2,\
@@ -85,14 +82,11 @@ set_env() {
     /opt/nesi,\
     /nesi/project,\
     /nesi/nobackup,\
+    /scale_wlg_persistent,\
+    /scale_wlg_nobackup,\
     ${HOME}:/home/${USER},\
     ${RSTUDIO_VAR_FOLDER}:/var/lib/rstudio-server,\
     ${ROOT}"
-
-    export SINGULARITY_BINDPATH="${SINGULARITY_BINDPATH},${BIND_PATH_REQUIRED},${BIND_PATH_FS},${BIND_PATH_APPS},${BIND_PATH_CAIRO}"
-    if [[ ${LOGLEVEL} = "DEBUG" ]]; then
-        echo "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
-    fi
 
     # export modulepath and additional environment variable to use modules inside rsession
     MODULEPATH_PROFILE="${RSTUDIO_VAR_FOLDER}/01-modulepath_nesi.sh"
@@ -102,7 +96,29 @@ set_env() {
     echo "export OS_ARCH_STRING=${OS_ARCH_STRING}" >> "${MODULEPATH_PROFILE}"
     echo "export CPUARCH_STRING=${CPUARCH_STRING}" >> "${MODULEPATH_PROFILE}"
 
-    export SINGULARITY_BINDPATH="${SINGULARITY_BINDPATH},${MODULEPATH_PROFILE}:/etc/profile.d/01-modulepath_nesi.sh"
+    BIND_MODULEPATH_PROFILE="${MODULEPATH_PROFILE}:/etc/profile.d/01-modulepath_nesi.sh"
+
+    # ensure Slurm commands will run in a terminal inside rsession
+    BIND_PATH_SLURM="\
+    /etc/hosts,\
+    /etc/opt/slurm,\
+    /opt/slurm,\
+    /usr/share/lmod/lmod,\
+    /var/run/munge,\
+    /lib64/libjson-c.so.5"
+
+    export SINGULARITY_BINDPATH="\
+    ${SINGULARITY_BINDPATH},\
+    ${BIND_PATH_REQUIRED},\
+    ${BIND_PATH_FS},\
+    ${BIND_PATH_APPS},\
+    ${BIND_PATH_CAIRO},\
+    ${BIND_MODULEPATH_PROFILE},\
+    ${BIND_PATH_SLURM}"
+
+    if [[ ${LOGLEVEL} = "DEBUG" ]]; then
+        echo "Singularity bindpath is $(echo "${SINGULARITY_BINDPATH}" | tr , '\n')"
+    fi
 }
 
 main() {
