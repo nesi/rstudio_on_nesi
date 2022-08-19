@@ -90,13 +90,17 @@ set_env() {
 
     # export modulepath and additional environment variable to use modules inside rsession
     MODULEPATH_PROFILE="${RSTUDIO_VAR_FOLDER}/01-modulepath_nesi.sh"
-
     echo "export MODULEPATH=${MODULEPATH}" > "${MODULEPATH_PROFILE}"
     echo "export SYSTEM_STRING=${SYSTEM_STRING}" >> "${MODULEPATH_PROFILE}"
     echo "export OS_ARCH_STRING=${OS_ARCH_STRING}" >> "${MODULEPATH_PROFILE}"
     echo "export CPUARCH_STRING=${CPUARCH_STRING}" >> "${MODULEPATH_PROFILE}"
 
-    BIND_MODULEPATH_PROFILE="${MODULEPATH_PROFILE}:/etc/profile.d/01-modulepath_nesi.sh"
+    MODULEDEFAULT_PROFILE="${RSTUDIO_VAR_FOLDER}/z01-modules.sh"
+    echo "module load NeSI" > "${MODULEDEFAULT_PROFILE}"
+
+    BIND_MODULEPATH_PROFILE="\
+    ${MODULEPATH_PROFILE}:/etc/profile.d/01-modulepath_nesi.sh,\
+    ${MODULEDEFAULT_PROFILE}:/etc/profile.d/z01-modules.sh,"
 
     # ensure Slurm commands will run in a terminal inside rsession
     BIND_PATH_SLURM="\
