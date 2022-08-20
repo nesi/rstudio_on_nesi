@@ -35,7 +35,8 @@ From: centos:centos7
 	yum -y install openssh-clients
 
 	# install TeX Live distribution, for Rmarkdown
-	yum -y install texlive\
+	yum -y install texlive \
+	texlive-iftex \
 	texlive-framed \
 	texlive-latex \
 	texlive-collection-latex \
