@@ -94,6 +94,7 @@ RSESSION_CONFIG_FILE="/var/lib/rstudio-server/rsession.conf"
 echo "r-libs-user=$R_LIBS_USER" >"$RSESSION_CONFIG_FILE"
 
 rserver_cmd="/usr/lib/rstudio-server/bin/rserver \
+--server-user ${USER} \
 --www-port ${RSTUDIO_PORT} \
 --auth-none 0 \
 --auth-pam-helper-path /usr/bin/pam-helper \

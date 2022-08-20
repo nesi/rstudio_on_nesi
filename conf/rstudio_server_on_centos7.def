@@ -42,8 +42,8 @@ From: centos:centos7
 	texlive-collection-latexrecommended
 
 	# Rstudio server
-	wget https://download2.rstudio.org/server/centos7/x86_64/rstudio-server-rhel-1.4.1717-x86_64.rpm
-	yum -y install rstudio-server-rhel-1.4.1717-x86_64.rpm
+	wget https://download2.rstudio.org/server/centos7/x86_64/rstudio-server-rhel-2022.07.1-554-x86_64.rpm
+	yum -y install rstudio-server-rhel-2022.07.1-554-x86_64.rpm
 
 	cat << "EOF" > /usr/bin/pam-helper
 #!/bin/bash
