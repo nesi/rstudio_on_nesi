@@ -18,30 +18,20 @@ Notes for the maintainers.
   where `<VERSION>` is the new version number
 
 
-## Rebuild the Singularity image on NeSI
+## Update the Singularity image
 
-Start from a clean working environment:
+Build the container using `singularity` on your workstation:
 ```
-module purge && module unload XALT
-module load Singularity/3.9.4
-```
-
-You may need to log in for singularity remote build with
-```
-singularity remote login
-```
-then
-```
-singularity build -r rstudio_server_on_centos7.sif conf/rstudio_server_on_centos7.def
+sudo singularity build rstudio_server_on_centos7.sif conf/rstudio_server_on_centos7.def
 ```
 
-If this is an update to the default image you will need to `sudo` to admin then 
+Then transfer the container image on NeSI and update to the default image (using `sudo` to switch to admin):
 ```
 cp rstudio_server_on_centos7.sif /opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__v<VERSION>.sif
 ```
 where `<VERSION>` should match the Python package version number.
 
-If you are not updating the default image, you can specify this image be used by running:
+*Note that you can test a new image without updating the default image, using a configuration file:*
 ```
 echo $PWD/rstudio_server_on_centos7.sif > ${XDG_CONFIG_HOME:=$HOME/.config}/rstudio_on_nesi/singularity_image_path
 ```
@@ -50,7 +40,7 @@ echo $PWD/rstudio_server_on_centos7.sif > ${XDG_CONFIG_HOME:=$HOME/.config}/rstu
 
 ```
 module purge && module load JupyterLab
-pip install . --use-feature=in-tree-build
+pip install -e .
 ```
 
 
