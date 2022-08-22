@@ -34,45 +34,14 @@ initialize() {
 set_env() {
     export SINGULARITYENV_LOGLEVEL="${LOGLEVEL}"
 
-    # Apps that don't need a special install.
-    BIND_PATH_APPS="\
-    /usr/bin/file,\
-    /usr/bin/htop,\
-    /usr/bin/less,\
-    /usr/bin/man,\
-    /usr/bin/nano,\
-    /usr/bin/unzip,\
-    /usr/bin/vim,\
-    /usr/bin/which"
-
-    BIND_PATH_REQUIRED="\
-    /run,\
-    /dev/tty0,\
-    /etc/machine-id,\
-    /dev/dri/card0,\
-    /usr/bin/ssh-agent,\
-    /usr/bin/gpg-agent,\
-    /usr/bin/lsb_release,\
-    /usr/share/fonts,\
-    /usr/share/X11/fonts,\
-    /usr/include,\
-    /etc/X11/,\
-    /usr/lib64/libGL.so.1.2.0,\
-    /usr/lib64/libmunge.so,\
-    /usr/lib64/libmunge.so.2,\
-    /usr/lib64/libmunge.so.2.0.0,\
-    /usr/lib64/libgbm.so.1.0.0,\
-    /lib/libjpeg.so.62,\
-    /lib64/libjpeg.so"
-
-    # libraries needed for cairo, used to render plots in R
-    BIND_PATH_CAIRO="\
-    /lib64/libpangocairo-1.0.so.0,\
-    /lib64/libpango-1.0.so.0,\
-    /lib64/libpangoft2-1.0.so.0,\
-    /lib64/libthai.so.0,\
-    /lib64/libharfbuzz.so.0,\
-    /lib64/libgraphite2.so.3"
+    #BIND_PATH_REQUIRED="\
+    # /run,\
+    # /dev/tty0,\
+    # /dev/dri/card0,\
+    # /usr/include,\
+    # /usr/lib64/libGL.so.1.2.0,\
+    # /usr/lib64/libmunge.so,\
+    # /lib/libjpeg.so.62"
 
     # folder used as a place where rstudio can write
     RSTUDIO_VAR_FOLDER="${XDG_DATA_HOME:=$HOME/.local/share}/rstudio_on_nesi"
@@ -107,16 +76,13 @@ set_env() {
     /etc/hosts,\
     /etc/opt/slurm,\
     /opt/slurm,\
-    /usr/share/lmod/lmod,\
     /var/run/munge,\
     /lib64/libjson-c.so.5"
+    # /usr/share/lmod/lmod
 
     export SINGULARITY_BINDPATH="\
     ${SINGULARITY_BINDPATH},\
-    ${BIND_PATH_REQUIRED},\
     ${BIND_PATH_FS},\
-    ${BIND_PATH_APPS},\
-    ${BIND_PATH_CAIRO},\
     ${BIND_MODULEPATH_PROFILE},\
     ${BIND_PATH_SLURM}"
 

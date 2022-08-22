@@ -5,6 +5,9 @@ From: centos:centos7
 	see https://github.com/nesi/rstudio_on_nesi
 
 %files
+	# list of RPM packages to install to mimic a Mahuika node
+	wbn_rpms.txt
+
 	# helper script for password authentication with RStudio server
 	pam-helper /usr/bin/pam-helper
 
@@ -12,34 +15,16 @@ From: centos:centos7
 	login.html /etc/rstudio/login.html
 
 %post
-	yum -y update
-	yum -y upgrade 
+	yum -y upgrade
 	yum -y install epel-release
-	yum -y install nginx
-	yum -y install which
-	yum -y install initscripts
-	yum -y install Lmod
-	yum -y install libicu
 
-	yum -y install git
-	yum -y install wget
+	# install packages from Mahuika node list (excluding slurm) without version numbers
+	yum -y install $(grep -v slurm wbn_rpms.txt | sed -r "s/-[0-9].*$//g" | sort | uniq)
 
-	yum -y install tcl-8.5.13-8.el7.x86_64 \
-	lua-filesystem-1.6.2-2.el7.x86_64 \
-	lua-devel-5.1.4-15.el7.x86_64 \
-	tcl-devel-8.5.13-8.el7.x86_64 \
-	lua-bitop-1.0.2-3.el7.x86_64 \
-	lua-json-1.3.2-2.el7.noarch \
-	lua-term-0.03-3.el7.x86_64 \
-	lua-lpeg-0.12-1.el7.x86_64 \
-	lua-posix-32-2.el7.x86_64 \
-	lua-5.1.4-15.el7.x86_64 
-
-	# install basics to compile software
-	yum -y groupinstall "Development Tools"
-
-	# SSH needed for some users workflows
-	yum -y install openssh-clients
+	# TODO packages not found on wbn node, are they really needed?
+	# lua-devel-5.1.4-15.el7.x86_64
+	# tcl-devel-8.5.13-8.el7.x86_64
+	# lua-bitop-1.0.2-3.el7.x86_64
 
 	# install TeX Live distribution, for Rmarkdown
 	yum -y install texlive \
@@ -48,6 +33,9 @@ From: centos:centos7
 	texlive-latex \
 	texlive-collection-latex \
 	texlive-collection-latexrecommended
+
+	# install nginx to fix urls returned by RStudio
+	yum -y install nginx
 
 	# install RStudio server
 	wget https://download2.rstudio.org/server/centos7/x86_64/rstudio-server-rhel-2022.07.1-554-x86_64.rpm
