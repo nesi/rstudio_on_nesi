@@ -1,3 +1,7 @@
+# TODO make it work on all branches: tag using branch name
+# TODO ensure artefacts have limited lifetime on github packages
+# TODO cancel current workflow if new run on the same branch, see https://stackoverflow.com/a/67939898
+# TODO create another workflow for main branch, based on tags and change in files
 name: Build container image
 
 on:
@@ -17,7 +21,7 @@ jobs:
           sudo apt update -y
           sudo apt install -y wget
       - name: Install Apptainer
-        run : |
+        run: |
           wget https://github.com/apptainer/apptainer/releases/download/v1.1.0-rc.2/apptainer_1.1.0-rc.2_amd64.deb
           sudo apt-get install -y ./apptainer_1.1.0-rc.2_amd64.deb
       - uses: actions/checkout@v3
