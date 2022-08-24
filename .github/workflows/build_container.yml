@@ -23,4 +23,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build container
         working-directory: ./conf
-        run: sudo apptainer build rstudio_server_on_centos7.{sif,def} 
+        run: sudo apptainer build container.sif rstudio_server_on_centos7.def
+      - name: Login and deploy
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | singularity remote login -u ${{ secrets.GHCR_USERNAME }} --password-stdin oras://ghcr.io
+          singularity push container.sif oras://ghcr.io/${GITHUB_REPOSITORY}:test_ci
