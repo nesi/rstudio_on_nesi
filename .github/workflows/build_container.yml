@@ -4,6 +4,7 @@
 name: Build container image
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'conf/**'
