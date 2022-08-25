@@ -80,4 +80,3 @@ From: centos:centos7
 	# adjust path to find deno and quarto
 	echo 'export QUARTO_DENO=/opt/deno/bin/deno' > /etc/profile.d/99-quarto.sh
 	echo 'export PATH="$PATH:/opt/deno/bin:/opt/quarto-1.1.120/bin"' >> /etc/profile.d/99-quarto.sh
-	chmod +x /etc/profile.d/99-quarto.sh
