@@ -35,6 +35,10 @@ From: centos:centos7
 	lua-posix-32-2.el7.x86_64 \
 	lua-5.1.4-15.el7.x86_64 
 
+	RSTUDIO_RELEASE="2023.06.0-421"
+	RSTUDIO_URL="https://download2.rstudio.org/server/centos7/x86_64/"
+	RSTUDIO_PACKAGE="rstudio-server-rhel-${RSTUDIO_RELEASE}-x86_64.rpm"
+
 	# install basics to compile software
 	yum -y groupinstall "Development Tools"
 
@@ -50,8 +54,8 @@ From: centos:centos7
 	texlive-collection-latexrecommended
 
 	# install RStudio server
-	wget https://download2.rstudio.org/server/centos7/x86_64/rstudio-server-rhel-2022.07.1-554-x86_64.rpm
-	yum -y install rstudio-server-rhel-2022.07.1-554-x86_64.rpm
+	wget "${RSTUDIO_URL}/${RSTUDIO_PACKAGE}"
+	yum -y install "${RSTUDIO_PACKAGE}"
 
 	# RStudio server configuration
 	echo "www-address=127.0.0.1" >> /etc/rstudio/rserver.conf
