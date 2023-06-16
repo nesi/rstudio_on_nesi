@@ -54,23 +54,27 @@ rm ~/.local/share/rstudio_on_nesi/singularity_image_path
 
 **Always test locally the package and associated container first.**
 
-In your clone of the git repository:
+Go to your local clone of the repository and make sure to be in the `main` branch with all the latest changes:
 
-- make sure to be in the `main` branch with all the latest changes
-  ```
-  git checkout main
-  git pull
-  ```
-- increase version number in `rstudio_on_nesi/__init__.py`, using the semantic versioning scheme
-- commit, push, tag and push the tag
-  ```
-  git commit -av -m "version <VERSION>"
-  git push
-  git tag v<VERSION>
-  git push --tags
-  ```
-  where `<VERSION>` is the new version number
-- check that the corresponding CI build job runs to completion without any error.
+```
+git checkout main
+git pull
+```
+
+Increase the version number in `rstudio_on_nesi/__init__.py`, using the semantic versioning scheme.
+
+Then commit, push, tag and push the tag
+
+```
+git commit -av -m "version <VERSION>"
+git push
+git tag v<VERSION>
+git push --tags
+```
+
+where `<VERSION>` is the new version number
+
+Check that the corresponding CI build job runs to completion without any error.
 
 Then fetch the corresponding container image:
 
@@ -85,7 +89,7 @@ and update to the default image (using `sudo` to switch to admin):
 cp rstudio_server_on_centos7__v<VERSION>.sif /opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__v<VERSION>.sif
 ```
 
-Request an update of the JupyterLab environment module to install the new version of the Python package.
+Finally, request an update of the JupyterLab environment module to install the new version of the Python package.
 
 
 ## Test without Jupyter
