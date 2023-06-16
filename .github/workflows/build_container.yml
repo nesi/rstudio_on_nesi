@@ -5,6 +5,8 @@ name: Build container image
 on:
   workflow_dispatch:
   push:
+    branches:
+      - '**'
     paths:
       - 'conf/**'
     tags:
