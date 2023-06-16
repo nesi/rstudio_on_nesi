@@ -28,8 +28,8 @@ where
 Make sure to configure RStudio-on-NeSI to use this container instead of the default one.
 
 ```
-mkdir -p ~/.local/share/rstudio_on_nesi/
-echo <SIFPATH> > ~/.local/share/rstudio_on_nesi/singularity_image_path
+mkdir -p ~/.config/rstudio_on_nesi/
+echo <SIFPATH> > ~/.config/rstudio_on_nesi/singularity_image_path
 ```
 
 Then start a new JupyterLab session on [NeSI JupyterHub](https://jupyter.nesi.org.nz), start RStudio and check that everything works as intended ;-).
@@ -46,7 +46,7 @@ pip uninstall rstudio-on-nesi
 - remove the file indicating the alternative container
 
 ```
-rm ~/.local/share/rstudio_on_nesi/singularity_image_path
+rm ~/.config/rstudio_on_nesi/singularity_image_path
 ```
 
 
