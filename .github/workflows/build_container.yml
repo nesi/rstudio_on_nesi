@@ -1,14 +1,16 @@
 # TODO ensure artefacts have limited lifetime on github packages
 # TODO cancel current workflow if new run on the same branch, see https://stackoverflow.com/a/67939898
-# TODO create another workflow for main branch, based on tags and change in files
 name: Build container image
 
 on:
   workflow_dispatch:
   push:
+    branches:
+      - '**'
     paths:
       - 'conf/**'
-
+    tags:
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
