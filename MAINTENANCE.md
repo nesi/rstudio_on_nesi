@@ -52,11 +52,21 @@ rm ~/.config/rstudio_on_nesi/singularity_image_path
 
 ## Release a new version
 
+### Variable for convenience
+
+Setup variables for your local git repo and the new version, repeatedly used in the workflow.
+
+```
+WKDIR=<PATH_TO_SIF_IMAGE> (The cloned git repo direcotry)
+VER=<VERSION_NUMBER> (eg v0.25.0)
+```
+
 **Always test locally the package and associated container first.**
 
 Go to your local clone of the repository and make sure to be in the `main` branch with all the latest changes:
 
 ```
+cd $WKDIR
 git checkout main
 git pull
 ```
@@ -66,13 +76,13 @@ Increase the version number in `rstudio_on_nesi/__init__.py`, using the semantic
 Then commit, push, tag and push the tag
 
 ```
-git commit -av -m "version <VERSION>"
+git commit -av -m "version $VER"
 git push
-git tag v<VERSION>
+git tag $VER
 git push --tags
 ```
 
-where `<VERSION>` is the new version number
+where `$VER` is the new version number
 
 Check that the corresponding CI build job runs to completion without any error.
 
@@ -80,14 +90,22 @@ Then fetch the corresponding container image:
 
 ```
 module purge && module load Apptainer
-apptainer pull rstudio_server_on_centos7__v<VERSION>.sif oras://ghcr.io/nesi/rstudio_on_nesi:v<VERSION>
+apptainer pull rstudio_server_on_centos7__$VER.sif oras://ghcr.io/nesi/rstudio_on_nesi:$VER
 ```
 
-and update to the default image (using `sudo` to switch to admin):
+Move the sif image to a readable place for nesi-apps-admin` and update the permissions. 
+```
+cp $WKDIR/rstudio_server_on_centos7__$VER.sif /nesi/project/nesi99999/
+chmod 775 /nesi/project/nesi99999/rstudio_server_on_centos7__$VER.sif
+```
+
+Switch to nesi-apps-admin to update to the default image: `sudo -iu nesi-apps-admin`, <VERSION> variable is not passed to nesi-apps-admin and needs to be manually included. Once copied the .sif can be removed as it still resides in your local repo.
 
 ```
-cp rstudio_server_on_centos7__v<VERSION>.sif /opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__v<VERSION>.sif
+cp /nesi/rstudio_server_on_centos7__<VERSION>.sif /opt/nesi/containers/rstudio-server/rstudio_server_on_centos7__<VERSION>.sif
+rm /nesi/rstudio_server_on_centos7__<VERSION>.sif
 ```
+TEST TEST TEST
 
 Finally, request an update of the JupyterLab environment module to install the new version of the Python package.
 
